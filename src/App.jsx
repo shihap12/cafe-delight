@@ -45,9 +45,7 @@ function App() {
   const appRef = useRef(null);
   const revealLayerRef = useRef(null);
   const titleRef = useRef(null);
-  const subtitleRef = useRef(null);
   const btnRef = useRef(null);
-  const videoRef = useRef(null);
   const heroRef = useRef(null);
   const aboutWrapRef = useRef(null);
   const menuWrapRef = useRef(null);
@@ -71,29 +69,6 @@ function App() {
         );
       }
 
-      // Initial animations
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-      if (!prefersReducedMotion) {
-        tl.fromTo(
-          titleRef.current,
-          { y: 50, opacity: 0 },
-          { y: 0, opacity: 1, duration: MOTION.slow, delay: 0.2 },
-        )
-          .fromTo(
-            subtitleRef.current,
-            { y: 30, opacity: 0 },
-            { y: 0, opacity: 1, duration: MOTION.base },
-            "-=0.4",
-          )
-          .fromTo(
-            btnRef.current,
-            { scale: 0.92, opacity: 0 },
-            { scale: 1, opacity: 1, duration: MOTION.fast },
-            "-=0.2",
-          );
-      }
-
       [aboutWrapRef.current, menuWrapRef.current, footerWrapRef.current]
         .filter(Boolean)
         .forEach((section) => {
@@ -114,40 +89,6 @@ function App() {
           );
         });
     }, appRef);
-
-    // Video Scrubbing Animation
-    const video = videoRef.current;
-    if (video && !prefersReducedMotion) {
-      video.pause();
-
-      const setupScrollTrigger = () => {
-        if (!video.duration) return;
-
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: heroRef.current,
-              start: "top top",
-              end: "bottom bottom",
-              scrub: 0.7,
-              onUpdate: () => {
-                if (!video.paused) video.pause();
-              },
-            },
-          })
-          .fromTo(
-            video,
-            { currentTime: 0 },
-            { currentTime: video.duration, ease: "none" },
-          );
-      };
-
-      if (video.readyState >= 1) {
-        setupScrollTrigger();
-      } else {
-        video.onloadedmetadata = setupScrollTrigger;
-      }
-    }
 
     return () => ctx.revert();
   }, []);
@@ -268,14 +209,13 @@ function App() {
       <Hero
         ref={heroRef}
         titleRef={titleRef}
-        subtitleRef={subtitleRef}
         btnRef={btnRef}
-        videoRef={videoRef}
         scrollToMenu={scrollToMenu}
+        theme={theme}
       />
 
-      {/* About Section */}
-      <div ref={aboutWrapRef} className="relative z-10 -mt-40">
+      {/* About Section — pulled up to overlap with Hero's gradient */}
+      <div ref={aboutWrapRef} className="relative z-10 -mt-12">
         <About />
       </div>
 

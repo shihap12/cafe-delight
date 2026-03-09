@@ -1,66 +1,295 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useRef, useEffect, useMemo } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+/* ── Split a word into individual letter spans ── */
+function LetterSpans({ word, className, innerRef }) {
+  return (
+    <span ref={innerRef} className={className}>
+      {word.split("").map((ch, i) => (
+        <span
+          key={i}
+          className="letter inline-block"
+          style={{ willChange: "transform" }}
+        >
+          {ch}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+const THEME_STYLES = {
+  classic: {
+    bg: "linear-gradient(135deg, #1a0e05 0%, #2c1810 30%, #1e1208 60%, #0f0a06 100%)",
+    glow1: "#d97706",
+    glow2: "#ea580c",
+    accent: "text-amber-400",
+    accent2: "text-orange-500",
+    btnGrad: "from-amber-500 to-orange-600",
+    btnShadow: "rgba(245,158,11,0.4)",
+    imgOverlay: "from-[#1a0e05]/80 via-[#2c1810]/40 to-transparent",
+    imgBorder: "border-amber-500/20",
+    imgGlow: "shadow-[0_0_60px_rgba(217,119,6,0.15)]",
+  },
+  midnight: {
+    bg: "linear-gradient(135deg, #06070a 0%, #0f1320 30%, #131926 60%, #0a0d14 100%)",
+    glow1: "#60a5fa",
+    glow2: "#a78bfa",
+    accent: "text-blue-400",
+    accent2: "text-violet-400",
+    btnGrad: "from-blue-500 to-violet-600",
+    btnShadow: "rgba(96,165,250,0.4)",
+    imgOverlay: "from-[#06070a]/80 via-[#131926]/40 to-transparent",
+    imgBorder: "border-blue-500/20",
+    imgGlow: "shadow-[0_0_60px_rgba(96,165,250,0.15)]",
+  },
+  sunset: {
+    bg: "linear-gradient(135deg, #2f1a10 0%, #5c2d15 30%, #3a2316 60%, #1f1008 100%)",
+    glow1: "#fb7185",
+    glow2: "#f97316",
+    accent: "text-rose-400",
+    accent2: "text-orange-400",
+    btnGrad: "from-rose-500 to-orange-600",
+    btnShadow: "rgba(251,113,133,0.4)",
+    imgOverlay: "from-[#2f1a10]/80 via-[#3a2316]/40 to-transparent",
+    imgBorder: "border-rose-500/20",
+    imgGlow: "shadow-[0_0_60px_rgba(251,113,133,0.15)]",
+  },
+};
 
 const Hero = forwardRef(
-  ({ titleRef, subtitleRef, btnRef, videoRef, scrollToMenu }, ref) => {
+  ({ titleRef, btnRef, scrollToMenu, theme = "classic" }, ref) => {
+    const imageWrapRef = useRef(null);
+    const line1Ref = useRef(null);
+    const line2Ref = useRef(null);
+    const line3Ref = useRef(null);
+    const taglineRef = useRef(null);
+    const heroContentRef = useRef(null);
+
+    const t = THEME_STYLES[theme] || THEME_STYLES.classic;
+
+    useEffect(() => {
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      if (prefersReducedMotion) return;
+
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline({
+          defaults: { ease: "power3.out" },
+          delay: 0.3,
+        });
+
+        // Line 1 — from right
+        tl.fromTo(
+          line1Ref.current,
+          { x: 300, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.9 },
+        );
+
+        // Line 2 — from top
+        tl.fromTo(
+          line2Ref.current,
+          { y: -200, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8 },
+          "-=0.5",
+        );
+
+        // Line 3 — from bottom
+        tl.fromTo(
+          line3Ref.current,
+          { y: 200, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8 },
+          "-=0.5",
+        );
+
+        // Wave/ripple effect after gathering
+        tl.to([line1Ref.current, line2Ref.current, line3Ref.current], {
+          keyframes: [
+            { y: -8, duration: 0.2 },
+            { y: 5, duration: 0.15 },
+            { y: -3, duration: 0.12 },
+            { y: 0, duration: 0.1 },
+          ],
+          stagger: 0.08,
+          ease: "power2.inOut",
+        });
+
+        // Tagline + button
+        tl.fromTo(
+          taglineRef.current,
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6 },
+          "-=0.3",
+        ).fromTo(
+          btnRef.current,
+          { scale: 0.85, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5 },
+          "-=0.2",
+        );
+
+        // Hero image — scale in
+        tl.fromTo(
+          imageWrapRef.current,
+          { scale: 0.8, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 1.2, ease: "power2.out" },
+          "-=1.0",
+        );
+
+        // ── Continuous wave animation — starts after intro finishes ──
+        const allLetters =
+          heroContentRef.current.querySelectorAll("h1 .letter");
+        if (allLetters.length) {
+          tl.add(() => {
+            const waveTl = gsap.timeline({ repeat: -1 });
+            allLetters.forEach((letter, i) => {
+              const offset = i * 0.08;
+              waveTl.to(
+                letter,
+                {
+                  scale: 1.4,
+                  duration: 0.2,
+                  ease: "sine.out",
+                },
+                offset,
+              );
+              waveTl.to(
+                letter,
+                {
+                  scale: 1,
+                  duration: 0.2,
+                  ease: "sine.in",
+                },
+                offset + 0.2,
+              );
+            });
+          });
+        }
+      }, heroContentRef);
+
+      return () => ctx.revert();
+    }, []);
+
     return (
-      <header ref={ref} className="relative h-[200vh]">
-        <div className="sticky top-0 h-screen flex flex-col items-center justify-center text-center text-white px-4 overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <video
-              ref={videoRef}
-              muted
-              playsInline
-              preload="auto"
-              className="w-full h-full object-cover scale-105"
-            >
-              <source src="/images/Cafe-Video1.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-            <div className="absolute inset-0 bg-black/50"></div>
+      <header ref={ref} className="relative min-h-screen">
+        <div
+          ref={heroContentRef}
+          className="relative h-screen flex items-center overflow-hidden transition-all duration-700"
+          style={{ background: t.bg }}
+        >
+          {/* Subtle background patterns */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div
+              className="absolute w-[600px] h-[600px] rounded-full opacity-10 transition-all duration-700"
+              style={{
+                background: `radial-gradient(circle, ${t.glow1} 0%, transparent 70%)`,
+                top: "-10%",
+                right: "10%",
+              }}
+            />
+            <div
+              className="absolute w-[400px] h-[400px] rounded-full opacity-5 transition-all duration-700"
+              style={{
+                background: `radial-gradient(circle, ${t.glow2} 0%, transparent 70%)`,
+                bottom: "5%",
+                left: "5%",
+              }}
+            />
           </div>
 
-          <div className="relative z-10 max-w-4xl">
-            <h1
-              ref={titleRef}
-              className="text-5xl md:text-7xl font-bold mb-6 tracking-tight drop-shadow-2xl font-display"
-            >
-              Taste the Passion
-            </h1>
-            <p
-              ref={subtitleRef}
-              className="text-xl md:text-2xl mb-10 font-light max-w-2xl mx-auto drop-shadow-lg text-stone-100"
-            >
-              Experience the finest coffee and desserts in a cozy atmosphere.
-              Order online now.
-            </p>
-            <button
-              ref={btnRef}
-              onClick={scrollToMenu}
-              className="relative overflow-hidden bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold py-4 px-12 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] cursor-pointer group"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                Order Now
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                  />
-                </svg>
-              </span>
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out rounded-full"></div>
-            </button>
+          {/* Left side — Text content */}
+          <div
+            ref={titleRef}
+            className="relative z-10 w-full lg:w-1/2 px-8 md:px-16 lg:px-20"
+          >
+            <div className="max-w-xl">
+              <h1 className="font-display mb-6 leading-[0.95]">
+                <LetterSpans
+                  word="Taste"
+                  innerRef={line1Ref}
+                  className="block text-5xl md:text-7xl lg:text-8xl font-bold text-white opacity-0"
+                />
+                <LetterSpans
+                  word="The"
+                  innerRef={line2Ref}
+                  className={`block text-5xl md:text-7xl lg:text-8xl font-bold ${t.accent} opacity-0 transition-colors duration-700`}
+                />
+                <LetterSpans
+                  word="Passion"
+                  innerRef={line3Ref}
+                  className={`block text-5xl md:text-7xl lg:text-8xl font-bold ${t.accent2} opacity-0 transition-colors duration-700`}
+                />
+              </h1>
+
+              <p
+                ref={taglineRef}
+                className="text-lg md:text-xl text-stone-300 mb-8 max-w-md font-light leading-relaxed opacity-0"
+              >
+                Experience the finest coffee and desserts in a cozy atmosphere.
+                Order online now.
+              </p>
+
+              <button
+                ref={btnRef}
+                onClick={scrollToMenu}
+                className={`relative overflow-hidden bg-gradient-to-r ${t.btnGrad} text-white font-bold py-4 px-12 rounded-full transition-all duration-300 hover:scale-105 cursor-pointer group opacity-0`}
+                style={{ "--tw-shadow-color": t.btnShadow }}
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  Order Now
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </span>
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out rounded-full"></div>
+              </button>
+            </div>
+          </div>
+
+          {/* Right side — Hero Image */}
+          <div
+            ref={imageWrapRef}
+            className="hidden lg:flex absolute right-0 top-0 w-1/2 h-full items-center justify-center opacity-0"
+          >
+            {/* Gradient overlay that blends image into background */}
+            <div
+              className={`absolute inset-0 bg-gradient-to-r ${t.imgOverlay} z-10 transition-all duration-700`}
+            />
+
+            <div className="relative w-[85%] max-w-lg z-20">
+              <div
+                className={`rounded-2xl overflow-hidden border ${t.imgBorder} ${t.imgGlow} transition-all duration-700`}
+              >
+                <img
+                  src="/images/latte-art.jpg"
+                  alt="Handcrafted latte art"
+                  className="w-full h-auto object-cover aspect-[4/5]"
+                />
+              </div>
+              {/* Decorative ring */}
+              <div
+                className="absolute -inset-4 rounded-3xl border opacity-20 transition-all duration-700"
+                style={{ borderColor: t.glow1 }}
+              />
+            </div>
           </div>
 
           {/* Scroll Indicator */}
-          <div className="absolute bottom-10 animate-bounce z-10 opacity-70">
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce z-10 opacity-70">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-8 w-8 text-white"
@@ -77,6 +306,14 @@ const Hero = forwardRef(
             </svg>
           </div>
         </div>
+
+        {/* Overlapping gradient that bleeds into the About section */}
+        <div
+          className="absolute bottom-0 left-0 w-full h-48 z-20 pointer-events-none transition-all duration-700"
+          style={{
+            background: `linear-gradient(to bottom, transparent 0%, var(--cafe-surface) 100%)`,
+          }}
+        />
       </header>
     );
   },
