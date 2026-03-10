@@ -22,23 +22,23 @@ const OrderSummary = ({
   handleConfirmOrder,
 }) => {
   return (
-    <div className="p-6 border-t transition-colors duration-300" style={{ borderColor: "var(--cafe-border)", backgroundColor: "var(--cafe-surface-card)" }}>
+    <div className="p-6 border-t border-stone-100 bg-stone-50">
       <div className="space-y-2 mb-6 text-sm">
-        <div className="flex justify-between" style={{ color: "var(--cafe-surface-muted)" }}>
+        <div className="flex justify-between text-stone-600">
           <span>Subtotal</span>
           <span>${subtotal.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between" style={{ color: "var(--cafe-surface-muted)" }}>
+        <div className="flex justify-between text-stone-600">
           <span>Discount</span>
           <span>- ${safeDiscount.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between" style={{ color: "var(--cafe-surface-muted)" }}>
+        <div className="flex justify-between text-stone-600">
           <span>Tax (10%)</span>
           <span>${taxAmount.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between items-center pt-2 border-t" style={{ borderColor: "var(--cafe-border)" }}>
-          <span className="font-semibold" style={{ color: "var(--cafe-surface-text)" }}>Total</span>
-          <span className="text-3xl font-bold" style={{ color: "var(--cafe-surface-text)" }}>
+        <div className="flex justify-between items-center pt-2 border-t border-stone-200">
+          <span className="text-stone-700 font-semibold">Total</span>
+          <span className="text-3xl font-bold text-stone-800">
             ${total.toFixed(2)}
           </span>
         </div>
@@ -50,14 +50,12 @@ const OrderSummary = ({
           placeholder="Coupon code"
           value={couponInput}
           onChange={(e) => setCouponInput(e.target.value)}
-          className="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition-colors duration-300 placeholder:opacity-50"
-          style={{ borderColor: "var(--cafe-border)", backgroundColor: "var(--cafe-surface)", color: "var(--cafe-surface-text)" }}
+          className="flex-1 border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
         />
         <button
           type="button"
           onClick={applyCoupon}
-          className="px-4 py-2 rounded-lg text-sm transition-colors duration-300"
-          style={{ backgroundColor: "var(--btn-bg)", color: "var(--btn-text)" }}
+          className="px-4 py-2 rounded-lg bg-stone-800 text-white text-sm hover:bg-stone-700 transition-colors"
         >
           Apply
         </button>
@@ -69,8 +67,7 @@ const OrderSummary = ({
           placeholder="Your name"
           value={customerName}
           onChange={(e) => setCustomerName(e.target.value)}
-          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition-colors duration-300 placeholder:opacity-50"
-          style={{ borderColor: "var(--cafe-border)", backgroundColor: "var(--cafe-surface)", color: "var(--cafe-surface-text)" }}
+          className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
         />
         <input
           type="tel"
@@ -82,16 +79,14 @@ const OrderSummary = ({
           inputMode="tel"
           autoComplete="tel"
           pattern="[0-9+\-\s()]{7,}"
-          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition-colors duration-300 placeholder:opacity-50"
-          style={{ borderColor: "var(--cafe-border)", backgroundColor: "var(--cafe-surface)", color: "var(--cafe-surface-text)" }}
+          className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
         />
         <textarea
           placeholder="Order notes (optional)"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           rows={2}
-          className="w-full border rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-amber-400 transition-colors duration-300 placeholder:opacity-50"
-          style={{ borderColor: "var(--cafe-border)", backgroundColor: "var(--cafe-surface)", color: "var(--cafe-surface-text)" }}
+          className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-amber-400"
         />
       </div>
 
@@ -110,8 +105,8 @@ const OrderSummary = ({
       )}
 
       {receipt && (
-        <div className="mb-4 p-4 rounded-lg border text-sm space-y-1 transition-colors duration-300" style={{ borderColor: "var(--cafe-border)", backgroundColor: "var(--cafe-surface)", color: "var(--cafe-surface-muted)" }}>
-          <p className="font-semibold" style={{ color: "var(--cafe-accent)" }}>Receipt</p>
+        <div className="mb-4 p-4 rounded-lg border border-amber-200 bg-amber-50 text-stone-700 text-sm space-y-1">
+          <p className="font-semibold text-amber-700">Receipt</p>
           <p>Order ID: {receipt.orderId}</p>
           <p>Date: {receipt.createdAt}</p>
           {receipt.couponCode && <p>Coupon: {receipt.couponCode}</p>}

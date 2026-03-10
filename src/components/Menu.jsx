@@ -76,6 +76,19 @@ const Menu = ({ addToCart }) => {
           stagger: 0.08,
           ease: "power2.out",
           clearProps: "clipPath",
+          onComplete: () => {
+            // Sync all glow animations so they cycle colors together
+            const cards = containerRef.current?.querySelectorAll(
+              ".animated-edge-glow",
+            );
+            if (cards) {
+              cards.forEach((card) => {
+                card.style.animation = "none";
+                card.offsetHeight; // force reflow
+                card.style.animation = "";
+              });
+            }
+          },
         },
       );
     }

@@ -205,26 +205,25 @@ const Cart = ({
       />
       <div
         ref={cartRef}
-        className="fixed top-0 right-0 h-full w-full max-w-md shadow-2xl z-[70] transform translate-x-full flex flex-col transition-colors duration-300"
-        style={{ backgroundColor: "var(--cafe-surface)" }}
+        className="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-[70] transform translate-x-full flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-label="Shopping cart"
       >
-        <div className="p-6 border-b flex justify-between items-center transition-colors duration-300" style={{ borderColor: "var(--cafe-border)", backgroundColor: "var(--cafe-surface-card)" }}>
-          <h2 className="text-2xl font-bold" style={{ color: "var(--cafe-surface-text)" }}>Your Order</h2>
+        <div className="p-6 border-b border-stone-100 flex justify-between items-center bg-stone-50">
+          <h2 className="text-2xl font-bold text-stone-800">Your Order</h2>
           <button
             onClick={closeCart}
-            className="p-2 hover:bg-white/10 rounded-full transition-colors"
+            className="p-2 hover:bg-stone-200 rounded-full transition-colors"
             aria-label="Close cart"
           >
-            <FaTimes className="h-6 w-6" style={{ color: "var(--cafe-surface-muted)" }} />
+            <FaTimes className="h-6 w-6 text-stone-600" />
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {items.length === 0 ? (
-            <div className="text-center py-12" style={{ color: "var(--cafe-surface-muted)" }}>
+            <div className="text-center py-12 text-stone-500">
               <FaShoppingBag className="h-16 w-16 mx-auto mb-4 opacity-50" />
               <p className="text-lg">Your cart is empty.</p>
               <p className="text-sm mt-2">
