@@ -12,6 +12,12 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, "/cafe/server/api"),
       },
+      "/uploads": {
+        target: "http://localhost",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/uploads/, "/cafe/uploads"),
+      },
     },
   },
 });

@@ -42,6 +42,8 @@ function App() {
     }
   });
 
+  const [siteSettings, setSiteSettings] = useState({});
+
   const appRef = useRef(null);
   const revealLayerRef = useRef(null);
   const titleRef = useRef(null);
@@ -51,10 +53,60 @@ function App() {
   const menuWrapRef = useRef(null);
   const footerWrapRef = useRef(null);
 
+  // Fetch site settings from backend
+  useEffect(() => {
+    fetch("/api/settings.php")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.data) setSiteSettings(d.data);
+      })
+      .catch(() => {});
+  }, []);
+
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem("cafe-theme", theme);
   }, [theme]);
+
+  // Apply admin theme color overrides
+  useEffect(() => {
+    const root = document.documentElement;
+    const cssVars = [
+      "--cafe-bg",
+      "--cafe-text",
+      "--cafe-muted",
+      "--cafe-accent",
+      "--cafe-accent-2",
+      "--cafe-surface",
+      "--cafe-surface-card",
+      "--cafe-surface-footer",
+      "--cafe-surface-text",
+      "--cafe-surface-muted",
+      "--cafe-border",
+    ];
+    cssVars.forEach((v) => root.style.removeProperty(v));
+
+    const themeKey = `theme_${theme}`;
+    const colors = siteSettings[themeKey];
+    if (colors && typeof colors === "object") {
+      const map = {
+        cafeBg: "--cafe-bg",
+        cafeText: "--cafe-text",
+        cafeMuted: "--cafe-muted",
+        cafeAccent: "--cafe-accent",
+        cafeAccent2: "--cafe-accent-2",
+        cafeSurface: "--cafe-surface",
+        cafeSurfaceCard: "--cafe-surface-card",
+        cafeSurfaceFooter: "--cafe-surface-footer",
+        cafeSurfaceText: "--cafe-surface-text",
+        cafeSurfaceMuted: "--cafe-surface-muted",
+        cafeBorder: "--cafe-border",
+      };
+      Object.entries(colors).forEach(([key, val]) => {
+        if (map[key] && val) root.style.setProperty(map[key], val);
+      });
+    }
+  }, [theme, siteSettings]);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -213,11 +265,12 @@ function App() {
         btnRef={btnRef}
         scrollToMenu={scrollToMenu}
         theme={theme}
+        settings={siteSettings}
       />
 
       {/* About Section — pulled up to overlap with Hero's gradient */}
       <div ref={aboutWrapRef} className="relative z-10 -mt-12">
-        <About />
+        <About settings={siteSettings} />
       </div>
 
       {/* Menu Section */}
@@ -227,7 +280,7 @@ function App() {
 
       {/* Footer Section */}
       <div ref={footerWrapRef}>
-        <Footer />
+        <Footer settings={siteSettings} />
       </div>
     </div>
   );

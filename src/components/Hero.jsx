@@ -62,7 +62,10 @@ const THEME_STYLES = {
 };
 
 const Hero = forwardRef(
-  ({ titleRef, btnRef, scrollToMenu, theme = "classic" }, ref) => {
+  (
+    { titleRef, btnRef, scrollToMenu, theme = "classic", settings = {} },
+    ref,
+  ) => {
     const imageWrapRef = useRef(null);
     const line1Ref = useRef(null);
     const line2Ref = useRef(null);
@@ -71,6 +74,14 @@ const Hero = forwardRef(
     const heroContentRef = useRef(null);
 
     const t = THEME_STYLES[theme] || THEME_STYLES.classic;
+
+    const heroLine1 = settings.hero_line1 || "Taste";
+    const heroLine2 = settings.hero_line2 || "The";
+    const heroLine3 = settings.hero_line3 || "Passion";
+    const heroSubtitle =
+      settings.hero_subtitle ||
+      "Experience the finest coffee and desserts in a cozy atmosphere. Order online now.";
+    const heroImage = settings.hero_image || "/images/latte-art.jpg";
 
     useEffect(() => {
       const prefersReducedMotion = window.matchMedia(
@@ -209,17 +220,17 @@ const Hero = forwardRef(
             <div className="max-w-xl">
               <h1 className="font-display mb-6 leading-[0.95]">
                 <LetterSpans
-                  word="Taste"
+                  word={heroLine1}
                   innerRef={line1Ref}
                   className="block text-5xl md:text-7xl lg:text-8xl font-bold text-white opacity-0"
                 />
                 <LetterSpans
-                  word="The"
+                  word={heroLine2}
                   innerRef={line2Ref}
                   className={`block text-5xl md:text-7xl lg:text-8xl font-bold ${t.accent} opacity-0 transition-colors duration-700`}
                 />
                 <LetterSpans
-                  word="Passion"
+                  word={heroLine3}
                   innerRef={line3Ref}
                   className={`block text-5xl md:text-7xl lg:text-8xl font-bold ${t.accent2} opacity-0 transition-colors duration-700`}
                 />
@@ -229,8 +240,7 @@ const Hero = forwardRef(
                 ref={taglineRef}
                 className="text-lg md:text-xl text-stone-300 mb-8 max-w-md font-light leading-relaxed opacity-0"
               >
-                Experience the finest coffee and desserts in a cozy atmosphere.
-                Order online now.
+                {heroSubtitle}
               </p>
 
               <button
@@ -263,7 +273,7 @@ const Hero = forwardRef(
                 className={`rounded-2xl overflow-hidden border ${t.imgBorder} ${t.imgGlow} transition-all duration-700`}
               >
                 <img
-                  src="/images/latte-art.jpg"
+                  src={heroImage}
                   alt="Handcrafted latte art"
                   className="w-full h-auto object-cover aspect-[4/5]"
                 />
