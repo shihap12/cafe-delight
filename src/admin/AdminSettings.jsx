@@ -91,6 +91,16 @@ export default function AdminSettings({ csrfToken }) {
   const [status, setStatus] = useState({ type: "", msg: "" });
   const [loading, setLoading] = useState(true);
 
+  // Auto-hide success message after 2.5 seconds
+  useEffect(() => {
+    if (status.type === "success" && status.msg) {
+      const timer = setTimeout(() => {
+        setStatus({ type: "", msg: "" });
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
+
   // Password change
   const [pwForm, setPwForm] = useState({
     currentPassword: "",

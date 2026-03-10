@@ -58,10 +58,17 @@ export default function AdminApp() {
     return <div className="admin-loading">Loading...</div>;
   }
 
+  // If not authenticated, render login route and redirect any deep link back to /admin
   if (!auth.user) {
-    return <AdminLogin onLogin={handleLogin} />;
+    return (
+      <Routes>
+        <Route path="/" element={<AdminLogin onLogin={handleLogin} />} />
+        <Route path="*" element={<Navigate to="/admin" replace />} />
+      </Routes>
+    );
   }
 
+  // Authenticated — render admin layout and children routes
   return (
     <AdminLayout user={auth.user} onLogout={handleLogout}>
       <Routes>

@@ -22,10 +22,17 @@ export default function AdminLogin({ onLogin }) {
         body: JSON.stringify({ username: username.trim(), password }),
       });
 
-      const data = await res.json();
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        setError("Server error. Try again later.");
+        setLoading(false);
+        return;
+      }
 
       if (!res.ok) {
-        setError(data.error || "Login failed");
+        setError(data.error || "Invalid username or password");
         return;
       }
 

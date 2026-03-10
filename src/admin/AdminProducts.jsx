@@ -10,6 +10,16 @@ export default function AdminProducts({ csrfToken }) {
   const [editing, setEditing] = useState(null);
   const [status, setStatus] = useState({ type: "", msg: "" });
 
+  // Auto-hide success message after 2.5 seconds
+  useEffect(() => {
+    if (status.type === "success" && status.msg) {
+      const timer = setTimeout(() => {
+        setStatus({ type: "", msg: "" });
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
+
   const fetchProducts = async () => {
     try {
       const res = await fetch("/api/admin/products.php", {
