@@ -106,7 +106,7 @@ export const menuItems = [
     description: "Creamy steamed milk with rich espresso and latte art.",
     price: 5.0,
     category: "Drinks",
-    image: "/images/latte-art.jpg",
+    image: "/images/caffe-latte.jpg",
   },
   {
     id: 14,
@@ -130,7 +130,7 @@ export const menuItems = [
     description: "Concentrated espresso shot with a silky crema.",
     price: 3.0,
     category: "Drinks",
-    image: "/images/coffee-grinding.jpg",
+    image: "/images/signature-espresso.jpg",
   },
   {
     id: 17,
@@ -142,10 +142,11 @@ export const menuItems = [
   },
   {
     id: 18,
-    name: "Assorted Mini Desserts",
-    description: "A selection of mini desserts to share with coffee.",
-    price: 12.0,
+    name: "Chocolate \u00c9clair",
+    description:
+      "Delicate choux pastry filled with cream and topped with rich chocolate.",
+    price: 5.5,
     category: "Desserts",
-    image: "/images/cafe-interior.jpg",
+    image: "/images/chocolate-eclair.jpg",
   },
 ];

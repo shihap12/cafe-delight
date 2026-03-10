@@ -89,7 +89,7 @@ const Menu = ({ addToCart }) => {
       className="py-16 px-4 min-h-screen themed-surface cafe-section-texture"
     >
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-12 accent-text font-display">
+        <h2 className="text-4xl font-bold text-center mb-12 accent-text font-display relative z-[60]">
           Our Menu
         </h2>
 

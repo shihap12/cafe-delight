@@ -53,9 +53,9 @@ INSERT INTO `menu_items` (`name`, `description`, `price`, `category`, `image`) V
 ('Lotus Biscoff Cheesecake', 'Creamy cheesecake with a Lotus Biscoff crust and topping.', 7.25, 'Desserts', '/images/lotus-cheesecake.webp'),
 ('NYC Cheesecake', 'Classic New York style cheesecake, rich and dense.', 6.75, 'Desserts', '/images/nyc-cheesecake.webp'),
 ('Tiramisu Slice', 'Coffee-soaked ladyfingers with mascarpone cream.', 6.25, 'Desserts', '/images/tiramisu.webp'),
-('Caffè Latte', 'Creamy steamed milk with rich espresso and latte art.', 5.00, 'Drinks', '/images/latte-art.jpg'),
+('Caffè Latte', 'Creamy steamed milk with rich espresso and latte art.', 5.00, 'Drinks', '/images/caffe-latte.jpg'),
 ('Barista\'s Special', 'House special brewed by our expert baristas.', 4.25, 'Drinks', '/images/barista.webp'),
 ('House Coffee Beans (250g)', 'Freshly roasted beans to brew at home.', 8.00, 'Drinks', '/images/beans.webp'),
-('Signature Espresso', 'Concentrated espresso shot with a silky crema.', 3.00, 'Drinks', '/images/coffee-grinding.jpg'),
+('Signature Espresso', 'Concentrated espresso shot with a silky crema.', 3.00, 'Drinks', '/images/signature-espresso.jpg'),
 ('Hario Pour Over', 'Single pour-over brew using our Hario dripper for clarity.', 4.75, 'Drinks', '/images/hario.avif'),
-('Assorted Mini Desserts', 'A selection of mini desserts to share with coffee.', 12.00, 'Desserts', '/images/cafe-interior.jpg');
+('Chocolate \u00c9clair', 'Delicate choux pastry filled with cream and topped with rich chocolate.', 5.50, 'Desserts', '/images/chocolate-eclair.jpg');

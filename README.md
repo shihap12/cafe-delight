@@ -304,9 +304,38 @@ VITE_API_BASE=http://localhost:8000/api
 
 ---
 
+## 📋 Menu Items
+
+The app ships with **18 sample menu items** across two categories:
+
+| # | Name | Category | Price |
+|---|------|----------|-------|
+| 1 | Spanish Iced Latte | Drinks | $5.50 |
+| 2 | Turkish Coffee | Drinks | $4.00 |
+| 3 | Caramel Macchiato | Drinks | $6.00 |
+| 4 | Hot Chocolate | Drinks | $4.50 |
+| 5 | Iced Matcha Latte | Drinks | $5.75 |
+| 6 | Classic Brownie | Desserts | $3.50 |
+| 7 | Basque Cheesecake | Desserts | $7.00 |
+| 8 | Chocolate Lava Cake | Desserts | $6.50 |
+| 9 | Honey Cake (Medovik) | Desserts | $7.50 |
+| 10 | Lotus Biscoff Cheesecake | Desserts | $7.25 |
+| 11 | NYC Cheesecake | Desserts | $6.75 |
+| 12 | Tiramisu Slice | Desserts | $6.25 |
+| 13 | Caffè Latte | Drinks | $5.00 |
+| 14 | Barista's Special | Drinks | $4.25 |
+| 15 | House Coffee Beans (250g) | Drinks | $8.00 |
+| 16 | Signature Espresso | Drinks | $3.00 |
+| 17 | Hario Pour Over | Drinks | $4.75 |
+| 18 | Chocolate Éclair | Desserts | $5.50 |
+
+Menu data is stored in `server/schema.sql` and mirrored in `src/data/menuItems.js` as a frontend fallback.
+
+---
+
 ## ✅ Next steps
 
-If you want, I can add:
+Possible enhancements:
 
 - Authentication (simple admin panel)
 - More API endpoints (admin CRUD for menu items)

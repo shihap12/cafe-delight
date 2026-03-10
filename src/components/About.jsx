@@ -60,8 +60,8 @@ const About = () => {
 
         <div className="md:w-1/2 about-animate opacity-0 translate-y-10">
           <img
-            src="/images/cafe-interior.jpg"
-            alt="Cafe interior"
+            src="/images/coffee-grinding.jpg"
+            alt="Coffee machine in our cafe"
             className="w-full rounded-lg shadow-lg object-cover"
           />
         </div>

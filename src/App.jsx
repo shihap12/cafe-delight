@@ -80,6 +80,7 @@ function App() {
               opacity: 1,
               duration: prefersReducedMotion ? 0.2 : 0.7,
               ease: "power2.out",
+              clearProps: "transform",
               scrollTrigger: {
                 trigger: section,
                 start: "top 82%",
