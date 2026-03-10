@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { FaTimes, FaShoppingBag } from "react-icons/fa";
 import gsap from "gsap";
 import { buildApiUrl } from "../config/api";
 import CartItem from "./CartItem";
@@ -216,40 +217,14 @@ const Cart = ({
             className="p-2 hover:bg-stone-200 rounded-full transition-colors"
             aria-label="Close cart"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-stone-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <FaTimes className="h-6 w-6 text-stone-600" />
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {items.length === 0 ? (
             <div className="text-center py-12 text-stone-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-16 w-16 mx-auto mb-4 opacity-50"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1}
-                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                />
-              </svg>
+              <FaShoppingBag className="h-16 w-16 mx-auto mb-4 opacity-50" />
               <p className="text-lg">Your cart is empty.</p>
               <p className="text-sm mt-2">
                 Add some delicious items from the menu!

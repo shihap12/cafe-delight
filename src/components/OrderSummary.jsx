@@ -1,4 +1,5 @@
 import React from "react";
+import { FaCheck, FaArrowRight } from "react-icons/fa";
 
 const OrderSummary = ({
   subtotal,
@@ -130,35 +131,13 @@ const OrderSummary = ({
             </>
           ) : showSuccessTick ? (
             <>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.704 5.29a1 1 0 010 1.42l-7.2 7.2a1 1 0 01-1.42 0l-3.2-3.2a1 1 0 111.415-1.42l2.49 2.49 6.49-6.49a1 1 0 011.425 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <FaCheck className="h-5 w-5" />
               <span>Order Confirmed</span>
             </>
           ) : (
             <>
               <span>Confirm Order</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <FaArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
             </>
           )}
         </span>
