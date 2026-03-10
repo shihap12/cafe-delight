@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./admin.css";
 
 export default function AdminLogin({ onLogin }) {
@@ -6,6 +7,8 @@ export default function AdminLogin({ onLogin }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,6 +40,9 @@ export default function AdminLogin({ onLogin }) {
       }
 
       onLogin(data.user, data.csrfToken);
+      // After successful login, redirect to returnTo (if present) or to admin products
+      const returnTo = location.state?.returnTo || "/admin/products";
+      navigate(returnTo, { replace: true });
     } catch {
       setError("Connection error. Make sure the server is running.");
     } finally {

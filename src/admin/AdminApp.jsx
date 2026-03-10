@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import AdminLogin from "./AdminLogin";
 import AdminLayout from "./AdminLayout";
 import AdminProducts from "./AdminProducts";
@@ -59,11 +59,13 @@ export default function AdminApp() {
   }
 
   // If not authenticated, render login route and redirect any deep link back to /admin
+  const location = useLocation();
   if (!auth.user) {
+    const returnTo = location.pathname + location.search;
     return (
       <Routes>
         <Route path="/" element={<AdminLogin onLogin={handleLogin} />} />
-        <Route path="*" element={<Navigate to="/admin" replace />} />
+        <Route path="*" element={<Navigate to="/admin" replace state={{ returnTo }} />} />
       </Routes>
     );
   }
