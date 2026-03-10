@@ -1,5 +1,12 @@
 import React from "react";
-import { FaCoffee, FaBars, FaSun, FaMoon, FaAdjust, FaShoppingCart } from "react-icons/fa";
+import {
+  FaCoffee,
+  FaBars,
+  FaSun,
+  FaMoon,
+  FaAdjust,
+  FaShoppingCart,
+} from "react-icons/fa";
 
 const Navbar = ({
   isNavOpen,
