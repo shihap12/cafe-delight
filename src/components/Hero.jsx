@@ -151,6 +151,15 @@ const Hero = forwardRef(
           "-=1.0",
         );
 
+        // Start the edge animation shortly after the image reveals
+        tl.add(() => {
+          try {
+            imageWrapRef.current?.querySelector('.dual-edge-border')?.classList.add('start-edge-anim');
+          } catch (e) {
+            /* ignore */
+          }
+        }, '>-0.6');
+
         // ── Continuous wave animation — starts after intro finishes ──
         const allLetters =
           heroContentRef.current.querySelectorAll("h1 .letter");
@@ -261,7 +270,7 @@ const Hero = forwardRef(
           {/* Right side — Hero Image */}
           <div
             ref={imageWrapRef}
-            className="hidden lg:flex absolute right-0 top-0 w-1/2 h-full items-center justify-center opacity-0"
+            className="hidden lg:flex absolute right-0 top-[3px] w-1/2 h-full items-center justify-center opacity-0"
           >
             {/* Gradient overlay that blends image into background */}
             <div
@@ -270,7 +279,7 @@ const Hero = forwardRef(
 
             <div className="relative w-[85%] max-w-lg z-20">
               <div
-                className={`rounded-2xl overflow-hidden border ${t.imgBorder} ${t.imgGlow} transition-all duration-700`}
+                className={`rounded-2xl overflow-hidden border ${t.imgBorder} ${t.imgGlow} transition-all duration-700 dual-edge-border`}
               >
                 <img
                   src={heroImage}
@@ -278,11 +287,11 @@ const Hero = forwardRef(
                   className="w-full h-auto object-cover aspect-[4/5]"
                 />
               </div>
-              {/* Decorative ring */}
-              <div
-                className="absolute -inset-4 rounded-3xl border opacity-20 transition-all duration-700"
-                style={{ borderColor: t.glow1 }}
-              />
+                {/* Decorative ring */}
+                <div
+                  className="absolute -inset-4 rounded-3xl border opacity-20 transition-all duration-700"
+                  style={{ borderColor: t.glow1 }}
+                />
             </div>
           </div>
 
