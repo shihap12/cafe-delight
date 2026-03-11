@@ -10,13 +10,14 @@ export default defineConfig({
         target: "http://localhost",
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, "/cafe/server/api"),
+        // Backend moved to `cafe-backend/server`
+        rewrite: (path) => path.replace(/^\/api/, "/cafe-backend/server/api"),
       },
       "/uploads": {
         target: "http://localhost",
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/uploads/, "/cafe/uploads"),
+        rewrite: (path) => path.replace(/^\/uploads/, "/cafe-backend/uploads"),
       },
     },
   },
