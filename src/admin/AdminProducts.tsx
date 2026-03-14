@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaUpload } from "react-icons/fa";
+import { Product } from "../types";
 
-export default function AdminProducts({ csrfToken }: any) {
-  const [products, setProducts] = useState<any[]>([]);
+export default function AdminProducts({ csrfToken }: { csrfToken?: string }) {
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [editing, setEditing] = useState<any>(null);
+  const [editing, setEditing] = useState<Product | null>(null);
   const [status, setStatus] = useState({ type: "", msg: "" });
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export default function AdminProducts({ csrfToken }: any) {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
+          "X-CSRF-Token": csrfToken || "",
         },
         credentials: "include",
         body: JSON.stringify({ id: product.id }),
@@ -62,7 +63,7 @@ export default function AdminProducts({ csrfToken }: any) {
     }
   };
 
-  const openEdit = (product: any) => {
+  const openEdit = (product: Product) => {
     setEditing(product);
     setModalOpen(true);
   };

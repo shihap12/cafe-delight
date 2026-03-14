@@ -8,6 +8,7 @@ import About from "./components/About";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
+import { MenuItem, CartItem, Settings, Theme } from "./types";
 
 gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
 
@@ -21,7 +22,7 @@ const App: React.FC = () => {
     slow: 0.9,
   } as const;
 
-  const [cartItems, setCartItems] = useState<any[]>(() => {
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     try {
       const savedCart = localStorage.getItem("cafe-cart");
       return savedCart ? JSON.parse(savedCart) : [];
@@ -45,7 +46,7 @@ const App: React.FC = () => {
     }
   });
 
-  const [siteSettings, setSiteSettings] = useState<Record<string, any>>({});
+  const [siteSettings, setSiteSettings] = useState<Settings>({});
 
   const appRef = useRef<HTMLDivElement | null>(null);
   const revealLayerRef = useRef<HTMLDivElement | null>(null);
@@ -165,7 +166,7 @@ const App: React.FC = () => {
     };
   }, [isCartOpen]);
 
-  const addToCart = (item: any) => {
+  const addToCart = (item: MenuItem) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((i) => i.id === item.id);
       if (existingItem) {
@@ -179,11 +180,11 @@ const App: React.FC = () => {
     setIsCartOpen(true);
   };
 
-  const removeFromCart = (itemId: any) => {
+  const removeFromCart = (itemId: number | string) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
   };
 
-  const updateCartItemQuantity = (itemId: any, delta: number) => {
+  const updateCartItemQuantity = (itemId: number | string, delta: number) => {
     setCartItems((prevItems) =>
       prevItems
         .map((item) =>

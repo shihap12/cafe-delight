@@ -1,7 +1,29 @@
 import React from "react";
 import { FaCheck, FaArrowRight } from "react-icons/fa";
+import { CartItem } from "../types";
 
-const OrderSummary: React.FC<any> = ({
+type OrderSummaryProps = {
+  subtotal: number;
+  safeDiscount: number;
+  taxAmount: number;
+  total: number;
+  couponInput: string;
+  setCouponInput: (v: string) => void;
+  applyCoupon: () => void;
+  customerName: string;
+  setCustomerName: (v: string) => void;
+  customerPhone: string;
+  setCustomerPhone: (v: string) => void;
+  notes: string;
+  setNotes: (v: string) => void;
+  status: { type?: string; message?: string };
+  receipt: Record<string, any> | null;
+  isSubmitting: boolean;
+  showSuccessTick: boolean;
+  handleConfirmOrder: () => void;
+};
+
+const OrderSummary: React.FC<OrderSummaryProps> = ({
   subtotal,
   safeDiscount,
   taxAmount,

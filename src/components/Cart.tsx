@@ -4,8 +4,16 @@ import gsap from "gsap";
 import { buildApiUrl } from "../config/api";
 import CartItem from "./CartItem";
 import OrderSummary from "./OrderSummary";
+import { CartItem as CartItemType } from "../types";
 
-const Cart: React.FC<any> = ({
+const Cart: React.FC<{
+  items: CartItemType[];
+  removeFromCart: (id: number | string) => void;
+  updateItemQuantity: (id: number | string, delta: number) => void;
+  clearCart: () => void;
+  isOpen: boolean;
+  closeCart: () => void;
+}> = ({
   items,
   removeFromCart,
   updateItemQuantity,
@@ -19,8 +27,8 @@ const Cart: React.FC<any> = ({
   const [customerPhone, setCustomerPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [couponInput, setCouponInput] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
-  const [receipt, setReceipt] = useState<any>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<Record<string, any> | null>(null);
+  const [receipt, setReceipt] = useState<Record<string, any> | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
   const [showSuccessTick, setShowSuccessTick] = useState(false);

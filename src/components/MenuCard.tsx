@@ -1,10 +1,11 @@
 import React from "react";
 import gsap from "gsap";
 import { FaPlus } from "react-icons/fa";
+import { MenuItem } from "../types";
 
 const MenuCard: React.FC<{
-  item: any;
-  addToCart: (item: any) => void;
+  item: MenuItem;
+  addToCart: (item: MenuItem) => void;
   supportsTilt: boolean;
 }> = ({ item, addToCart, supportsTilt }) => {
   const handleMouseMove = (e: React.MouseEvent) => {

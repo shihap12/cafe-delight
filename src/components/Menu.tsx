@@ -3,11 +3,12 @@ import gsap from "gsap";
 import { menuItems } from "../data/menuItems";
 import { buildApiUrl } from "../config/api";
 import MenuCard from "./MenuCard";
+import { MenuItem } from "../types";
 
-const Menu: React.FC<{ addToCart: (item: any) => void }> = ({ addToCart }) => {
+const Menu: React.FC<{ addToCart: (item: MenuItem) => void }> = ({ addToCart }) => {
   const [filter, setFilter] = useState<string>("All");
-  const [allItems, setAllItems] = useState<any[]>([]);
-  const [filteredItems, setFilteredItems] = useState<any[]>([]);
+  const [allItems, setAllItems] = useState<MenuItem[]>([]);
+  const [filteredItems, setFilteredItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [supportsTilt, setSupportsTilt] = useState(false);
