@@ -2,14 +2,18 @@ import React from "react";
 import gsap from "gsap";
 import { FaPlus } from "react-icons/fa";
 
-const MenuCard = ({ item, addToCart, supportsTilt }) => {
-  const handleMouseMove = (e) => {
+const MenuCard: React.FC<{
+  item: any;
+  addToCart: (item: any) => void;
+  supportsTilt: boolean;
+}> = ({ item, addToCart, supportsTilt }) => {
+  const handleMouseMove = (e: React.MouseEvent) => {
     if (!supportsTilt) return;
     const card = document.getElementById(`card-${item.id}`);
     if (!card) return;
     const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = (e as any).clientX - rect.left;
+    const y = (e as any).clientY - rect.top;
 
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;

@@ -11,16 +11,17 @@ import Hero from "./components/Hero";
 
 gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
 
-function App() {
-  const THEMES = ["classic", "midnight", "sunset"];
+const App: React.FC = () => {
+  type Theme = "classic" | "midnight" | "sunset";
+  const THEMES: Theme[] = ["classic", "midnight", "sunset"];
 
   const MOTION = {
     fast: 0.35,
     base: 0.6,
     slow: 0.9,
-  };
+  } as const;
 
-  const [cartItems, setCartItems] = useState(() => {
+  const [cartItems, setCartItems] = useState<any[]>(() => {
     try {
       const savedCart = localStorage.getItem("cafe-cart");
       return savedCart ? JSON.parse(savedCart) : [];
@@ -31,29 +32,30 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [cartPulse, setCartPulse] = useState(false);
-  const [theme, setTheme] = useState(() => {
+  const [theme, setTheme] = useState<Theme>(() => {
     try {
       const saved = localStorage.getItem("cafe-theme");
       if (saved === "day") return "classic";
       if (saved === "night") return "midnight";
-      return THEMES.includes(saved) ? saved : "classic";
+      return THEMES.includes((saved || "") as Theme)
+        ? (saved as unknown as Theme)
+        : "classic";
     } catch {
       return "classic";
     }
   });
 
-  const [siteSettings, setSiteSettings] = useState({});
+  const [siteSettings, setSiteSettings] = useState<Record<string, any>>({});
 
-  const appRef = useRef(null);
-  const revealLayerRef = useRef(null);
-  const titleRef = useRef(null);
-  const btnRef = useRef(null);
-  const heroRef = useRef(null);
-  const aboutWrapRef = useRef(null);
-  const menuWrapRef = useRef(null);
-  const footerWrapRef = useRef(null);
+  const appRef = useRef<HTMLDivElement | null>(null);
+  const revealLayerRef = useRef<HTMLDivElement | null>(null);
+  const titleRef = useRef<HTMLDivElement | null>(null);
+  const btnRef = useRef<HTMLButtonElement | null>(null);
+  const heroRef = useRef<HTMLElement | null>(null);
+  const aboutWrapRef = useRef<HTMLDivElement | null>(null);
+  const menuWrapRef = useRef<HTMLDivElement | null>(null);
+  const footerWrapRef = useRef<HTMLDivElement | null>(null);
 
-  // Fetch site settings from backend
   useEffect(() => {
     fetch("/api/settings.php")
       .then((r) => r.json())
@@ -68,7 +70,6 @@ function App() {
     localStorage.setItem("cafe-theme", theme);
   }, [theme]);
 
-  // Apply admin theme color overrides
   useEffect(() => {
     const root = document.documentElement;
     const cssVars = [
@@ -89,7 +90,7 @@ function App() {
     const themeKey = `theme_${theme}`;
     const colors = siteSettings[themeKey];
     if (colors && typeof colors === "object") {
-      const map = {
+      const map: Record<string, string> = {
         cafeBg: "--cafe-bg",
         cafeText: "--cafe-text",
         cafeMuted: "--cafe-muted",
@@ -103,7 +104,8 @@ function App() {
         cafeBorder: "--cafe-border",
       };
       Object.entries(colors).forEach(([key, val]) => {
-        if (map[key] && val) root.style.setProperty(map[key], val);
+        const name = map[key];
+        if (name && val != null) root.style.setProperty(name, String(val));
       });
     }
   }, [theme, siteSettings]);
@@ -141,7 +143,7 @@ function App() {
             },
           );
         });
-    }, appRef);
+    }, appRef as any);
 
     return () => ctx.revert();
   }, []);
@@ -163,7 +165,7 @@ function App() {
     };
   }, [isCartOpen]);
 
-  const addToCart = (item) => {
+  const addToCart = (item: any) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((i) => i.id === item.id);
       if (existingItem) {
@@ -177,11 +179,11 @@ function App() {
     setIsCartOpen(true);
   };
 
-  const removeFromCart = (itemId) => {
+  const removeFromCart = (itemId: any) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
   };
 
-  const updateCartItemQuantity = (itemId, delta) => {
+  const updateCartItemQuantity = (itemId: any, delta: number) => {
     setCartItems((prevItems) =>
       prevItems
         .map((item) =>
@@ -233,7 +235,6 @@ function App() {
         className="fixed inset-0 z-[80] pointer-events-none app-reveal-layer"
       />
 
-      {/* Cart Component */}
       <Cart
         items={cartItems}
         removeFromCart={removeFromCart}
@@ -243,7 +244,6 @@ function App() {
         closeCart={() => setIsCartOpen(false)}
       />
 
-      {/* Navigation */}
       <Navbar
         isNavOpen={isNavOpen}
         setIsNavOpen={setIsNavOpen}
@@ -258,32 +258,28 @@ function App() {
         scrollToAbout={scrollToAbout}
       />
 
-      {/* Hero Section */}
       <Hero
-        ref={heroRef}
-        titleRef={titleRef}
-        btnRef={btnRef}
+        ref={heroRef as any}
+        titleRef={titleRef as any}
+        btnRef={btnRef as any}
         scrollToMenu={scrollToMenu}
         theme={theme}
         settings={siteSettings}
       />
 
-      {/* About Section — pulled up to overlap with Hero's gradient */}
       <div ref={aboutWrapRef} className="relative z-10 -mt-12">
         <About settings={siteSettings} />
       </div>
 
-      {/* Menu Section */}
       <div ref={menuWrapRef}>
         <Menu addToCart={addToCart} />
       </div>
 
-      {/* Footer Section */}
       <div ref={footerWrapRef}>
         <Footer settings={siteSettings} />
       </div>
     </div>
   );
-}
+};
 
 export default App;

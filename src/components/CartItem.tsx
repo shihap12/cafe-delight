@@ -1,6 +1,18 @@
 import React from "react";
 
-const CartItem = ({ item, updateItemQuantity, removeFromCart }) => {
+type CartItemType = {
+  id: number | string;
+  name: string;
+  price: number;
+  quantity: number;
+  image?: string;
+};
+
+const CartItem: React.FC<{
+  item: CartItemType;
+  updateItemQuantity: (id: number | string, delta: number) => void;
+  removeFromCart: (id: number | string) => void;
+}> = ({ item, updateItemQuantity, removeFromCart }) => {
   return (
     <div className="flex gap-4 p-4 bg-stone-50 rounded-xl border border-stone-100 items-center">
       <img

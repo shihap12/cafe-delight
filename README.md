@@ -4,6 +4,17 @@ A full-stack online café ordering app built with **React** (frontend) and **PHP
 
 ---
 
+## 📝 Recent changes (TypeScript migration)
+
+- Frontend converted from JavaScript/JSX to TypeScript (.ts/.tsx) with strict settings.
+- Added `tsconfig.json`, `src/global.d.ts`, and type definitions for React.
+- Converted core components, admin area, and utilities to TypeScript while preserving UI and GSAP animations.
+- Frontend files: 20 files, 3,637 lines. Backend files: 15 files, 2,614 lines. Total: 35 files, 6,251 lines.
+
+These changes were applied to the repository on March 14, 2026.
+
+---
+
 ## 📸 Features
 
 - **Interactive Menu** — filterable by category (Drinks / Desserts) with 3D tilt card effects
@@ -18,7 +29,7 @@ A full-stack online café ordering app built with **React** (frontend) and **PHP
 
 ## 🗂️ Project Structure
 
-This repository contains the frontend and the backend as two folders. The backend was added as `cafe-backend`.
+This repository contains the frontend and the backend as two folders. The backend was added as `cafe_backend`.
 
 ```
 cafe/                          ← Frontend (Vite + React)
@@ -45,7 +56,7 @@ cafe/                          ← Frontend (Vite + React)
 ├── vite.config.js             ← Vite config (may proxy API requests)
 └── postcss.config.cjs
 
-cafe-backend/                  ← Backend (PHP + MySQL, originally from XAMPP htdocs)
+cafe_backend/                  ← Backend (PHP + MySQL, originally from XAMPP htdocs)
 └── server/
   ├── config.php             ← DB connection settings
   ├── db.php                 ← PDO connection helper
@@ -90,54 +101,56 @@ The dev server starts at `http://localhost:5173`.
 
 Notes about the backend location and proxying:
 
-- This repo now includes the backend in `cafe-backend/server/`. If you copy the backend into XAMPP's `htdocs`, you can serve it as `http://localhost/cafe-backend/server/`.
+- This repo now includes the backend in `cafe_backend/server/`. If you copy the backend into XAMPP's `htdocs`, you can serve it as `http://localhost/cafe_backend/server/`.
 - Vite can proxy `/api/*` to your backend URL. Update `vite.config.js` or set `VITE_API_BASE` in a `.env` file if your backend is hosted elsewhere.
 
 Examples:
 
 ```bash
-# If running PHP built-in server from inside `cafe-backend`:
-cd cafe-backend
+# If running PHP built-in server from inside `cafe_backend`:
+cd cafe_backend
 php -S localhost:8000 -t server
 
 # Or run from repo root:
-php -S localhost:8000 -t cafe-backend/server
+php -S localhost:8000 -t cafe_backend/server
 ```
 
-If you copied the backend into XAMPP as `C:\xampp\htdocs\cafe-backend`, API URLs will be like `http://localhost/cafe-backend/server/api/menu.php`.
+If you copied the backend into XAMPP as `C:\xampp\htdocs\cafe_backend`, API URLs will be like `http://localhost/cafe_backend/server/api/menu.php`.
 
 ### 2. Backend Setup
 
-1. Copy (or symlink) the `cafe-backend/server/` folder into your XAMPP htdocs, or run it from the `cafe-backend` folder directly. Examples:
+1. Copy (or symlink) the `cafe_backend/server/` folder into your XAMPP htdocs, or run it from the `cafe_backend` folder directly. Examples:
 
-  Copy to XAMPP:
+Copy to XAMPP:
 
-  ```text
-  C:\xampp\htdocs\cafe-backend\server\
-  ```
+```text
+C:\xampp\htdocs\cafe_backend\server\
+```
 
-  Or run PHP built-in server from project:
+Or run PHP built-in server from project:
 
-  ```bash
-  cd cafe-backend
-  php -S localhost:8000 -t server
-  ```
+```bash
+cd cafe_backend
+php -S localhost:8000 -t server
+```
+
 2. Start **Apache** and **MySQL** from the XAMPP Control Panel.
 
 3. Run the setup script to create the database and seed data:
 
-   ```
-   http://localhost/cafe/server/setup.php
-   ```
+```
+http://localhost/cafe_backend/server/setup.php
+```
 
-   This creates the `cafe` database with `menu_items`, `orders`, and `order_items` tables, and inserts sample menu items.
+This creates the `cafe` database with `menu_items`, `orders`, and `order_items` tables, and inserts sample menu items.
 
 4. Verify the API works (adjust path to where you hosted the backend):
-  ```
-  http://localhost/cafe-backend/server/api/menu.php
-  # or if using built-in server:
-  http://localhost:8000/api/menu.php
-  ```
+
+```
+http://localhost/cafe_backend/server/api/menu.php
+# or if using built-in server:
+http://localhost:8000/api/menu.php
+```
 
 ### 3. Build for Production
 
@@ -319,7 +332,7 @@ npm run dev
 
 Then open: **http://localhost:5173/**
 
-> Vite is configured to proxy `/api/*` to your backend base. If you left the backend under `cafe-backend` in XAMPP, the proxy target would be `http://localhost/cafe-backend/server/api/`.
+> Vite is configured to proxy `/api/*` to your backend base. If you left the backend under `cafe_backend` in XAMPP, the proxy target would be `http://localhost/cafe_backend/server/api/`.
 >
 > You can override the API base by creating a `.env` in the project root:
 >

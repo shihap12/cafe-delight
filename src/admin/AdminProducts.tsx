@@ -1,16 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaUpload } from "react-icons/fa";
 
-export default function AdminProducts({ csrfToken }) {
-  const [products, setProducts] = useState([]);
+export default function AdminProducts({ csrfToken }: any) {
+  const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [editing, setEditing] = useState(null);
+  const [editing, setEditing] = useState<any>(null);
   const [status, setStatus] = useState({ type: "", msg: "" });
 
-  // Auto-hide success message after 2.5 seconds
   useEffect(() => {
     if (status.type === "success" && status.msg) {
       const timer = setTimeout(() => {
@@ -38,8 +37,8 @@ export default function AdminProducts({ csrfToken }) {
     fetchProducts();
   }, []);
 
-  const handleDelete = async (product) => {
-    if (!confirm(`Delete "${product.name}"?`)) return;
+  const handleDelete = async (product: any) => {
+    if (!window.confirm(`Delete "${product.name}"?`)) return;
 
     try {
       const res = await fetch("/api/admin/products.php", {
@@ -63,7 +62,7 @@ export default function AdminProducts({ csrfToken }) {
     }
   };
 
-  const openEdit = (product) => {
+  const openEdit = (product: any) => {
     setEditing(product);
     setModalOpen(true);
   };
@@ -103,7 +102,6 @@ export default function AdminProducts({ csrfToken }) {
           </button>
         </div>
 
-        {/* Filters */}
         <div
           style={{
             padding: "1rem 1.5rem",
@@ -144,7 +142,6 @@ export default function AdminProducts({ csrfToken }) {
           ))}
         </div>
 
-        {/* Table */}
         {loading ? (
           <div
             style={{ padding: "3rem", textAlign: "center", color: "#94a3b8" }}
@@ -191,7 +188,8 @@ export default function AdminProducts({ csrfToken }) {
                             borderRadius: 6,
                           }}
                           onError={(e) => {
-                            e.target.style.display = "none";
+                            (e.target as HTMLImageElement).style.display =
+                              "none";
                           }}
                         />
                       </td>
@@ -231,7 +229,6 @@ export default function AdminProducts({ csrfToken }) {
         )}
       </div>
 
-      {/* Product Modal */}
       {modalOpen && (
         <ProductModal
           product={editing}
@@ -244,10 +241,9 @@ export default function AdminProducts({ csrfToken }) {
   );
 }
 
-/* ── Product Add/Edit Modal ── */
-function ProductModal({ product, csrfToken, onClose, onSaved }) {
+function ProductModal({ product, csrfToken, onClose, onSaved }: any) {
   const isEdit = !!product;
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<any>({
     name: product?.name || "",
     description: product?.description || "",
     price: product?.price || "",
@@ -257,13 +253,13 @@ function ProductModal({ product, csrfToken, onClose, onSaved }) {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const fileRef = useRef(null);
+  const fileRef = useRef<HTMLInputElement | null>(null);
 
-  const handleChange = (field, value) => {
-    setForm((f) => ({ ...f, [field]: value }));
+  const handleChange = (field: string, value: any) => {
+    setForm((f: any) => ({ ...f, [field]: value }));
   };
 
-  const handleUpload = async (e) => {
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -313,12 +309,12 @@ function ProductModal({ product, csrfToken, onClose, onSaved }) {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     setError("");
 
-    const payload = isEdit ? { ...form, id: product.id } : form;
+    const payload: any = isEdit ? { ...form, id: product.id } : form;
     payload.price = parseFloat(payload.price) || 0;
 
     try {
@@ -465,7 +461,6 @@ function ProductModal({ product, csrfToken, onClose, onSaved }) {
                 )}
               </div>
 
-              {/* Or enter URL manually */}
               <input
                 className="admin-input"
                 value={form.image}

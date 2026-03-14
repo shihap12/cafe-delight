@@ -4,15 +4,15 @@ import { menuItems } from "../data/menuItems";
 import { buildApiUrl } from "../config/api";
 import MenuCard from "./MenuCard";
 
-const Menu = ({ addToCart }) => {
-  const [filter, setFilter] = useState("All");
-  const [allItems, setAllItems] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([]);
+const Menu: React.FC<{ addToCart: (item: any) => void }> = ({ addToCart }) => {
+  const [filter, setFilter] = useState<string>("All");
+  const [allItems, setAllItems] = useState<any[]>([]);
+  const [filteredItems, setFilteredItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [supportsTilt, setSupportsTilt] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const mediaReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -62,12 +62,11 @@ const Menu = ({ addToCart }) => {
     }
   }, [filter, allItems]);
 
-  // Animate items when they change
   useEffect(() => {
     if (prefersReducedMotion) return;
     if (containerRef.current) {
       gsap.fromTo(
-        containerRef.current.children,
+        (containerRef.current as any).children,
         { y: 24, opacity: 0 },
         {
           y: 0,
@@ -77,14 +76,14 @@ const Menu = ({ addToCart }) => {
           ease: "power2.out",
           clearProps: "clipPath",
           onComplete: () => {
-            // Sync all glow animations so they cycle colors together
-            const cards = containerRef.current?.querySelectorAll(
+            const cards = containerRef.current?.querySelectorAll<HTMLElement>(
               ".animated-edge-glow",
             );
             if (cards) {
               cards.forEach((card) => {
                 card.style.animation = "none";
-                card.offsetHeight; // force reflow
+                // force reflow
+                void card.offsetHeight;
                 card.style.animation = "";
               });
             }
@@ -127,7 +126,6 @@ const Menu = ({ addToCart }) => {
           <div className="text-center text-red-400 mb-12">{error}</div>
         ) : (
           <>
-            {/* Filter Buttons */}
             <div className="flex justify-center gap-4 mb-12">
               {categories.map((cat) => (
                 <button
@@ -158,7 +156,6 @@ const Menu = ({ addToCart }) => {
               ))}
             </div>
 
-            {/* Menu Grid */}
             <div
               ref={containerRef}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 perspective-1000"

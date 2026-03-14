@@ -1,7 +1,9 @@
 import React from "react";
 import { FaInstagram, FaTiktok, FaFacebookF, FaWhatsapp } from "react-icons/fa";
 
-const Footer = ({ settings = {} }) => {
+type Settings = Record<string, any>;
+
+const Footer: React.FC<{ settings?: Settings }> = ({ settings = {} }) => {
   const footerBrand = settings.footer_brand || "CAFE DELIGHT";
   const footerTagline =
     settings.footer_tagline || "Taste the Passion in Every Sip";
@@ -40,23 +42,23 @@ const Footer = ({ settings = {} }) => {
   return (
     <footer className="themed-footer py-12 border-t">
       <div className="max-w-7xl mx-auto px-4 flex flex-col items-center">
-        {/* Brand */}
         <h2 className="text-3xl font-bold accent-text mb-2 tracking-tighter font-display">
           {footerBrand}
         </h2>
         <p className="themed-muted text-sm mb-8">{footerTagline}</p>
 
-        {/* Social Icons */}
         <div className="flex gap-6 mb-8">
           {socialLinks.map((social) => (
             <a
               key={social.name}
               href={social.href}
               className="social-icon-glow p-3 themed-card rounded-full transition-all duration-300 transform hover:scale-110 hover:-translate-y-1"
-              style={{
-                "--icon-brand": social.brandColor,
-                "--icon-glow": social.glowColor,
-              }}
+              style={
+                {
+                  ["--icon-brand" as any]: social.brandColor,
+                  ["--icon-glow" as any]: social.glowColor,
+                } as React.CSSProperties
+              }
               aria-label={social.name}
             >
               <social.icon className="w-6 h-6" />
@@ -64,7 +66,6 @@ const Footer = ({ settings = {} }) => {
           ))}
         </div>
 
-        {/* Copyright */}
         <div className="text-center text-xs themed-muted">
           <p>
             &copy; {new Date().getFullYear()} Cafe Delight. All rights reserved.

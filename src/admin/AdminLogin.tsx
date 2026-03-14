@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./admin.css";
 
-export default function AdminLogin({ onLogin }) {
+export default function AdminLogin({ onLogin }: any) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -10,7 +10,7 @@ export default function AdminLogin({ onLogin }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username.trim() || !password) return;
 
@@ -25,7 +25,7 @@ export default function AdminLogin({ onLogin }) {
         body: JSON.stringify({ username: username.trim(), password }),
       });
 
-      let data = {};
+      let data: any = {};
       try {
         data = await res.json();
       } catch {
@@ -40,8 +40,7 @@ export default function AdminLogin({ onLogin }) {
       }
 
       onLogin(data.user, data.csrfToken);
-      // After successful login, redirect to returnTo (if present) or to admin products
-      const returnTo = location.state?.returnTo || "/admin/products";
+      const returnTo = (location.state as any)?.returnTo || "/admin/products";
       navigate(returnTo, { replace: true });
     } catch {
       setError("Connection error. Make sure the server is running.");

@@ -1,7 +1,7 @@
 import React from "react";
 import { FaCheck, FaArrowRight } from "react-icons/fa";
 
-const OrderSummary = ({
+const OrderSummary: React.FC<any> = ({
   subtotal,
   safeDiscount,
   taxAmount,

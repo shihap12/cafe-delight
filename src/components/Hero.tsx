@@ -1,14 +1,19 @@
-import React, { forwardRef, useRef, useEffect, useMemo } from "react";
+import React, { forwardRef, useRef, useEffect } from "react";
 import { FaArrowRight, FaArrowDown } from "react-icons/fa";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ── Split a word into individual letter spans ── */
-function LetterSpans({ word, className, innerRef }) {
+type LetterSpansProps = {
+  word: string;
+  className?: string;
+  innerRef?: React.Ref<HTMLSpanElement>;
+};
+
+function LetterSpans({ word, className, innerRef }: LetterSpansProps) {
   return (
-    <span ref={innerRef} className={className}>
+    <span ref={innerRef as any} className={className}>
       {word.split("").map((ch, i) => (
         <span
           key={i}
@@ -59,19 +64,36 @@ const THEME_STYLES = {
     imgBorder: "border-rose-500/20",
     imgGlow: "shadow-[0_0_60px_rgba(251,113,133,0.15)]",
   },
+} as const;
+
+type Settings = {
+  hero_line1?: string;
+  hero_line2?: string;
+  hero_line3?: string;
+  hero_subtitle?: string;
+  hero_image?: string;
+  [k: string]: any;
 };
 
-const Hero = forwardRef(
+type HeroProps = {
+  titleRef?: React.Ref<HTMLDivElement> | null;
+  btnRef?: React.Ref<HTMLButtonElement> | null;
+  scrollToMenu?: () => void;
+  theme?: keyof typeof THEME_STYLES;
+  settings?: Settings;
+};
+
+const Hero = forwardRef<HTMLElement, HeroProps>(
   (
     { titleRef, btnRef, scrollToMenu, theme = "classic", settings = {} },
     ref,
   ) => {
-    const imageWrapRef = useRef(null);
-    const line1Ref = useRef(null);
-    const line2Ref = useRef(null);
-    const line3Ref = useRef(null);
-    const taglineRef = useRef(null);
-    const heroContentRef = useRef(null);
+    const imageWrapRef = useRef<HTMLDivElement | null>(null);
+    const line1Ref = useRef<HTMLSpanElement | null>(null);
+    const line2Ref = useRef<HTMLSpanElement | null>(null);
+    const line3Ref = useRef<HTMLSpanElement | null>(null);
+    const taglineRef = useRef<HTMLParagraphElement | null>(null);
+    const heroContentRef = useRef<HTMLDivElement | null>(null);
 
     const t = THEME_STYLES[theme] || THEME_STYLES.classic;
 
@@ -95,14 +117,12 @@ const Hero = forwardRef(
           delay: 0.3,
         });
 
-        // Line 1 — from right
         tl.fromTo(
           line1Ref.current,
           { x: 300, opacity: 0 },
           { x: 0, opacity: 1, duration: 0.9 },
         );
 
-        // Line 2 — from top
         tl.fromTo(
           line2Ref.current,
           { y: -200, opacity: 0 },
@@ -110,7 +130,6 @@ const Hero = forwardRef(
           "-=0.5",
         );
 
-        // Line 3 — from bottom
         tl.fromTo(
           line3Ref.current,
           { y: 200, opacity: 0 },
@@ -118,7 +137,6 @@ const Hero = forwardRef(
           "-=0.5",
         );
 
-        // Wave/ripple effect after gathering
         tl.to([line1Ref.current, line2Ref.current, line3Ref.current], {
           keyframes: [
             { y: -8, duration: 0.2 },
@@ -130,20 +148,18 @@ const Hero = forwardRef(
           ease: "power2.inOut",
         });
 
-        // Tagline + button
         tl.fromTo(
           taglineRef.current,
           { y: 30, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.6 },
           "-=0.3",
         ).fromTo(
-          btnRef.current,
+          btnRef as any,
           { scale: 0.85, opacity: 0 },
           { scale: 1, opacity: 1, duration: 0.5 },
           "-=0.2",
         );
 
-        // Hero image — scale in
         tl.fromTo(
           imageWrapRef.current,
           { scale: 0.8, opacity: 0 },
@@ -151,22 +167,12 @@ const Hero = forwardRef(
           "-=1.0",
         );
 
-        // Start the edge animation shortly after the image reveals
-        tl.add(() => {
-          try {
-            imageWrapRef.current?.querySelector('.dual-edge-border')?.classList.add('start-edge-anim');
-          } catch (e) {
-            /* ignore */
-          }
-        }, '>-0.6');
-
-        // ── Continuous wave animation — starts after intro finishes ──
         const allLetters =
-          heroContentRef.current.querySelectorAll("h1 .letter");
+          heroContentRef.current?.querySelectorAll("h1 .letter") || [];
         if (allLetters.length) {
           tl.add(() => {
             const waveTl = gsap.timeline({ repeat: -1 });
-            allLetters.forEach((letter, i) => {
+            allLetters.forEach((letter: Element, i: number) => {
               const offset = i * 0.08;
               waveTl.to(
                 letter,
@@ -189,7 +195,7 @@ const Hero = forwardRef(
             });
           });
         }
-      }, heroContentRef);
+      }, heroContentRef as any);
 
       return () => ctx.revert();
     }, []);
@@ -201,7 +207,6 @@ const Hero = forwardRef(
           className="relative h-screen flex items-center overflow-hidden transition-all duration-700"
           style={{ background: t.bg }}
         >
-          {/* Subtle background patterns */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div
               className="absolute w-[600px] h-[600px] rounded-full opacity-10 transition-all duration-700"
@@ -221,9 +226,8 @@ const Hero = forwardRef(
             />
           </div>
 
-          {/* Left side — Text content */}
           <div
-            ref={titleRef}
+            ref={titleRef as any}
             className="relative z-10 w-full lg:w-1/2 px-8 md:px-16 lg:px-20"
           >
             <div className="max-w-xl">
@@ -253,10 +257,10 @@ const Hero = forwardRef(
               </p>
 
               <button
-                ref={btnRef}
+                ref={btnRef as any}
                 onClick={scrollToMenu}
                 className={`relative overflow-hidden bg-gradient-to-r ${t.btnGrad} text-white font-bold py-4 px-12 rounded-full transition-all duration-300 hover:scale-105 cursor-pointer group opacity-0`}
-                style={{ "--tw-shadow-color": t.btnShadow }}
+                style={{ ["--tw-shadow-color" as any]: t.btnShadow }}
               >
                 <span className="relative z-10 flex items-center gap-2">
                   Order Now
@@ -267,19 +271,17 @@ const Hero = forwardRef(
             </div>
           </div>
 
-          {/* Right side — Hero Image */}
           <div
-            ref={imageWrapRef}
-            className="hidden lg:flex absolute right-0 top-[3px] w-1/2 h-full items-center justify-center opacity-0"
+            ref={imageWrapRef as any}
+            className="hidden lg:flex absolute right-0 top-0 w-1/2 h-full items-center justify-center opacity-0"
           >
-            {/* Gradient overlay that blends image into background */}
             <div
               className={`absolute inset-0 bg-gradient-to-r ${t.imgOverlay} z-10 transition-all duration-700`}
             />
 
             <div className="relative w-[85%] max-w-lg z-20">
               <div
-                className={`rounded-2xl overflow-hidden border ${t.imgBorder} ${t.imgGlow} transition-all duration-700 dual-edge-border`}
+                className={`rounded-2xl overflow-hidden border ${t.imgBorder} ${t.imgGlow} transition-all duration-700`}
               >
                 <img
                   src={heroImage}
@@ -287,21 +289,18 @@ const Hero = forwardRef(
                   className="w-full h-auto object-cover aspect-[4/5]"
                 />
               </div>
-                {/* Decorative ring */}
-                <div
-                  className="absolute -inset-4 rounded-3xl border opacity-20 transition-all duration-700"
-                  style={{ borderColor: t.glow1 }}
-                />
+              <div
+                className="absolute -inset-4 rounded-3xl border opacity-20 transition-all duration-700"
+                style={{ borderColor: t.glow1 }}
+              />
             </div>
           </div>
 
-          {/* Scroll Indicator */}
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce z-10 opacity-70">
             <FaArrowDown className="h-8 w-8 text-white" />
           </div>
         </div>
 
-        {/* Overlapping gradient that bleeds into the About section */}
         <div
           className="absolute bottom-0 left-0 w-full h-48 z-20 pointer-events-none transition-all duration-700"
           style={{

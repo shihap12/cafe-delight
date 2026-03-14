@@ -5,7 +5,7 @@ import { buildApiUrl } from "../config/api";
 import CartItem from "./CartItem";
 import OrderSummary from "./OrderSummary";
 
-const Cart = ({
+const Cart: React.FC<any> = ({
   items,
   removeFromCart,
   updateItemQuantity,
@@ -13,20 +13,20 @@ const Cart = ({
   isOpen,
   closeCart,
 }) => {
-  const cartRef = useRef(null);
-  const overlayRef = useRef(null);
+  const cartRef = useRef<HTMLDivElement | null>(null);
+  const overlayRef = useRef<HTMLDivElement | null>(null);
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [couponInput, setCouponInput] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState(null);
-  const [receipt, setReceipt] = useState(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
+  const [receipt, setReceipt] = useState<any>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
   const [showSuccessTick, setShowSuccessTick] = useState(false);
 
   const TAX_RATE = 0.1;
-  const COUPONS = {
+  const COUPONS: Record<string, any> = {
     WELCOME10: { type: "percent", value: 10 },
     SWEET5: { type: "flat", value: 5 },
     CAFE15: { type: "percent", value: 15 },
@@ -43,8 +43,8 @@ const Cart = ({
   }, [isOpen]);
 
   useEffect(() => {
-    const handleEscape = (event) => {
-      if (event.key === "Escape" && isOpen) {
+    const handleEscape = (event: KeyboardEvent) => {
+      if ((event as KeyboardEvent).key === "Escape" && isOpen) {
         closeCart();
       }
     };
@@ -56,7 +56,7 @@ const Cart = ({
   }, [isOpen, closeCart]);
 
   const subtotal = items.reduce(
-    (sum, item) => sum + Number(item.price) * item.quantity,
+    (sum: number, item: any) => sum + Number(item.price) * item.quantity,
     0,
   );
 
@@ -136,7 +136,7 @@ const Cart = ({
         phone: customerPhone.trim(),
         notes: notes.trim(),
       },
-      items: items.map((item) => ({
+      items: items.map((item: any) => ({
         id: item.id,
         name: item.name,
         price: Number(item.price),
@@ -231,7 +231,7 @@ const Cart = ({
               </p>
             </div>
           ) : (
-            items.map((item) => (
+            items.map((item: any) => (
               <CartItem
                 key={item.id}
                 item={item}

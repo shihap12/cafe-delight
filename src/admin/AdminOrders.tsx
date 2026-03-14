@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-export default function AdminOrders({ csrfToken }) {
-  const [orders, setOrders] = useState([]);
+export default function AdminOrders({ csrfToken }: any) {
+  const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [expandedId, setExpandedId] = useState(null);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
 
   const fetchOrders = async (p = 1) => {
     setLoading(true);
@@ -29,7 +29,7 @@ export default function AdminOrders({ csrfToken }) {
     fetchOrders();
   }, []);
 
-  const toggleExpand = (id) => {
+  const toggleExpand = (id: number) => {
     setExpandedId(expandedId === id ? null : id);
   };
 
@@ -68,7 +68,7 @@ export default function AdminOrders({ csrfToken }) {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order) => (
+                {orders.map((order: any) => (
                   <>
                     <tr key={order.id}>
                       <td style={{ fontWeight: 600 }}>{order.id}</td>
@@ -116,16 +116,18 @@ export default function AdminOrders({ csrfToken }) {
                               gap: "0.5rem",
                             }}
                           >
-                            {(order.items || []).map((item, idx) => (
-                              <span
-                                key={idx}
-                                className="admin-badge admin-badge-blue"
-                                style={{ fontSize: "0.75rem" }}
-                              >
-                                {item.name || "Item"} x{item.quantity} — $
-                                {Number(item.unit_price).toFixed(2)}
-                              </span>
-                            ))}
+                            {(order.items || []).map(
+                              (item: any, idx: number) => (
+                                <span
+                                  key={idx}
+                                  className="admin-badge admin-badge-blue"
+                                  style={{ fontSize: "0.75rem" }}
+                                >
+                                  {item.name || "Item"} x{item.quantity} — $
+                                  {Number(item.unit_price).toFixed(2)}
+                                </span>
+                              ),
+                            )}
                             {(!order.items || order.items.length === 0) && (
                               <span
                                 style={{ color: "#94a3b8", fontSize: "0.8rem" }}
@@ -143,7 +145,6 @@ export default function AdminOrders({ csrfToken }) {
             </table>
           </div>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div
               style={{

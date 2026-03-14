@@ -8,7 +8,7 @@ import AdminSettings from "./AdminSettings";
 import "./admin.css";
 
 export default function AdminApp() {
-  const [auth, setAuth] = useState({
+  const [auth, setAuth] = useState<any>({
     checking: true,
     user: null,
     csrfToken: "",
@@ -38,7 +38,7 @@ export default function AdminApp() {
     }
   };
 
-  const handleLogin = (user, csrfToken) => {
+  const handleLogin = (user: any, csrfToken: string) => {
     setAuth({ checking: false, user, csrfToken });
   };
 
@@ -58,19 +58,20 @@ export default function AdminApp() {
     return <div className="admin-loading">Loading...</div>;
   }
 
-  // If not authenticated, render login route and redirect any deep link back to /admin
   const location = useLocation();
   if (!auth.user) {
     const returnTo = location.pathname + location.search;
     return (
       <Routes>
         <Route path="/" element={<AdminLogin onLogin={handleLogin} />} />
-        <Route path="*" element={<Navigate to="/admin" replace state={{ returnTo }} />} />
+        <Route
+          path="*"
+          element={<Navigate to="/admin" replace state={{ returnTo }} />}
+        />
       </Routes>
     );
   }
 
-  // Authenticated — render admin layout and children routes
   return (
     <AdminLayout user={auth.user} onLogout={handleLogout}>
       <Routes>

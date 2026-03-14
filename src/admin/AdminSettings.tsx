@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { FaSave, FaUpload, FaKey } from "react-icons/fa";
 
-const CONTENT_DEFAULTS = {
+const CONTENT_DEFAULTS: Record<string, any> = {
   hero_line1: "Taste",
   hero_line2: "The",
   hero_line3: "Passion",
@@ -22,7 +22,7 @@ const CONTENT_DEFAULTS = {
   social_whatsapp: "#",
 };
 
-const THEME_DEFAULTS = {
+const THEME_DEFAULTS: Record<string, any> = {
   classic: {
     cafeBg: "#f8f5ef",
     cafeText: "#1f1b16",
@@ -64,7 +64,7 @@ const THEME_DEFAULTS = {
   },
 };
 
-const COLOR_LABELS = {
+const COLOR_LABELS: Record<string, string> = {
   cafeBg: "Background",
   cafeText: "Text Color",
   cafeMuted: "Muted Text",
@@ -78,10 +78,12 @@ const COLOR_LABELS = {
   cafeBorder: "Border Color",
 };
 
-export default function AdminSettings({ csrfToken }) {
+export default function AdminSettings({ csrfToken }: any) {
   const [tab, setTab] = useState("content");
-  const [content, setContent] = useState({ ...CONTENT_DEFAULTS });
-  const [themes, setThemes] = useState({
+  const [content, setContent] = useState<Record<string, any>>({
+    ...CONTENT_DEFAULTS,
+  });
+  const [themes, setThemes] = useState<any>({
     classic: { ...THEME_DEFAULTS.classic },
     midnight: { ...THEME_DEFAULTS.midnight },
     sunset: { ...THEME_DEFAULTS.sunset },
@@ -91,17 +93,6 @@ export default function AdminSettings({ csrfToken }) {
   const [status, setStatus] = useState({ type: "", msg: "" });
   const [loading, setLoading] = useState(true);
 
-  // Auto-hide success message after 2.5 seconds
-  useEffect(() => {
-    if (status.type === "success" && status.msg) {
-      const timer = setTimeout(() => {
-        setStatus({ type: "", msg: "" });
-      }, 2500);
-      return () => clearTimeout(timer);
-    }
-  }, [status]);
-
-  // Password change
   const [pwForm, setPwForm] = useState({
     currentPassword: "",
     newPassword: "",
@@ -109,7 +100,17 @@ export default function AdminSettings({ csrfToken }) {
   });
   const [pwStatus, setPwStatus] = useState({ type: "", msg: "" });
 
-  const uploadRefs = { hero: useRef(null), about: useRef(null) };
+  const uploadRefs: any = {
+    hero: useRef<HTMLInputElement | null>(null),
+    about: useRef<HTMLInputElement | null>(null),
+  };
+
+  useEffect(() => {
+    if (status.type === "success" && status.msg) {
+      const timer = setTimeout(() => setStatus({ type: "", msg: "" }), 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   useEffect(() => {
     fetchSettings();
@@ -123,7 +124,6 @@ export default function AdminSettings({ csrfToken }) {
       const data = await res.json();
       const s = data.data || {};
 
-      // Merge loaded settings with defaults
       const newContent = { ...CONTENT_DEFAULTS };
       Object.keys(CONTENT_DEFAULTS).forEach((k) => {
         if (s[k] !== undefined) newContent[k] = s[k];
@@ -138,7 +138,7 @@ export default function AdminSettings({ csrfToken }) {
       });
       setThemes(newThemes);
     } catch {
-      // Use defaults
+      // ignore
     } finally {
       setLoading(false);
     }
@@ -148,7 +148,7 @@ export default function AdminSettings({ csrfToken }) {
     setSaving(true);
     setStatus({ type: "", msg: "" });
 
-    const payload = { ...content };
+    const payload: any = { ...content };
     ["classic", "midnight", "sunset"].forEach((t) => {
       payload[`theme_${t}`] = themes[t];
     });
@@ -181,7 +181,7 @@ export default function AdminSettings({ csrfToken }) {
     }
   };
 
-  const handleImageUpload = async (file, field) => {
+  const handleImageUpload = async (file: File | undefined, field: string) => {
     if (!file) return;
 
     const fd = new FormData();
@@ -203,7 +203,7 @@ export default function AdminSettings({ csrfToken }) {
     }
   };
 
-  const handlePasswordChange = async (e) => {
+  const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     setPwStatus({ type: "", msg: "" });
 
@@ -247,15 +247,15 @@ export default function AdminSettings({ csrfToken }) {
     }
   };
 
-  const updateThemeColor = (theme, key, value) => {
-    setThemes((prev) => ({
+  const updateThemeColor = (theme: string, key: string, value: string) => {
+    setThemes((prev: any) => ({
       ...prev,
       [theme]: { ...prev[theme], [key]: value },
     }));
   };
 
-  const resetTheme = (theme) => {
-    setThemes((prev) => ({
+  const resetTheme = (theme: string) => {
+    setThemes((prev: any) => ({
       ...prev,
       [theme]: { ...THEME_DEFAULTS[theme] },
     }));
@@ -279,7 +279,6 @@ export default function AdminSettings({ csrfToken }) {
         </div>
       )}
 
-      {/* Tabs */}
       <div className="admin-tabs">
         {["content", "themes", "security"].map((t) => (
           <button
@@ -296,11 +295,9 @@ export default function AdminSettings({ csrfToken }) {
         ))}
       </div>
 
-      {/* ── Content Tab ── */}
       {tab === "content" && (
         <div className="admin-card">
           <div className="admin-card-body">
-            {/* Hero Section */}
             <h4
               style={{
                 fontWeight: 600,
@@ -388,7 +385,7 @@ export default function AdminSettings({ csrfToken }) {
                   alt="Hero preview"
                   style={{ width: 120, borderRadius: 8, marginTop: 8 }}
                   onError={(e) => {
-                    e.target.style.display = "none";
+                    (e.target as HTMLImageElement).style.display = "none";
                   }}
                 />
               )}
@@ -396,7 +393,6 @@ export default function AdminSettings({ csrfToken }) {
 
             <hr style={{ margin: "2rem 0", borderColor: "#e2e8f0" }} />
 
-            {/* About Section */}
             <h4
               style={{
                 fontWeight: 600,
@@ -470,7 +466,6 @@ export default function AdminSettings({ csrfToken }) {
 
             <hr style={{ margin: "2rem 0", borderColor: "#e2e8f0" }} />
 
-            {/* Footer */}
             <h4
               style={{
                 fontWeight: 600,
@@ -506,7 +501,6 @@ export default function AdminSettings({ csrfToken }) {
 
             <hr style={{ margin: "2rem 0", borderColor: "#e2e8f0" }} />
 
-            {/* Social Links */}
             <h4
               style={{
                 fontWeight: 600,
@@ -558,11 +552,9 @@ export default function AdminSettings({ csrfToken }) {
         </div>
       )}
 
-      {/* ── Theme Colors Tab ── */}
       {tab === "themes" && (
         <div className="admin-card">
           <div className="admin-card-body">
-            {/* Theme selector */}
             <div
               style={{ display: "flex", gap: "0.5rem", marginBottom: "1.5rem" }}
             >
@@ -610,7 +602,6 @@ export default function AdminSettings({ csrfToken }) {
               ))}
             </div>
 
-            {/* Color Preview */}
             <div style={{ marginTop: "1.5rem" }}>
               <h4
                 style={{
@@ -699,7 +690,6 @@ export default function AdminSettings({ csrfToken }) {
         </div>
       )}
 
-      {/* ── Security Tab ── */}
       {tab === "security" && (
         <div className="admin-card">
           <div className="admin-card-header">

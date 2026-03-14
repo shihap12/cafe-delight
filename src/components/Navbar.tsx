@@ -8,7 +8,7 @@ import {
   FaShoppingCart,
 } from "react-icons/fa";
 
-const Navbar = ({
+const Navbar: React.FC<any> = ({
   isNavOpen,
   setIsNavOpen,
   isCartOpen,
@@ -36,7 +36,7 @@ const Navbar = ({
         <div className="flex items-center gap-4 font-medium">
           <div className="md:hidden">
             <button
-              onClick={() => setIsNavOpen((v) => !v)}
+              onClick={() => setIsNavOpen((v: boolean) => !v)}
               className="p-2 rounded-md hover:bg-white/10 transition-colors"
               aria-label="Toggle menu"
             >
@@ -90,7 +90,7 @@ const Navbar = ({
           </button>
 
           <button
-            onClick={() => setIsCartOpen((v) => !v)}
+            onClick={() => setIsCartOpen((v: boolean) => !v)}
             aria-pressed={isCartOpen}
             className="relative p-2 hover:bg-white/20 rounded-full transition-colors group"
           >
@@ -106,7 +106,6 @@ const Navbar = ({
         </div>
       </nav>
 
-      {/* Mobile nav panel */}
       <div
         className={`md:hidden fixed top-16 left-0 w-full z-40 transition-transform ${isNavOpen ? "translate-y-0" : "-translate-y-full"}`}
       >

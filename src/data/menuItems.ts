@@ -1,5 +1,13 @@
-export const menuItems = [
-  // Drinks
+export type MenuItem = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  image: string;
+};
+
+export const menuItems: MenuItem[] = [
   {
     id: 1,
     name: "Spanish Iced Latte",
@@ -41,8 +49,6 @@ export const menuItems = [
     category: "Drinks",
     image: "/images/matcha-latte.jpg",
   },
-
-  // Desserts
   {
     id: 6,
     name: "Classic Brownie",
@@ -99,7 +105,6 @@ export const menuItems = [
     category: "Desserts",
     image: "/images/tiramisu.webp",
   },
-  // Re-add unused images as menu items and classify appropriately
   {
     id: 13,
     name: "Caffè Latte",

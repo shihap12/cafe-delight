@@ -4,8 +4,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const About = ({ settings = {} }) => {
-  const ref = useRef(null);
+type Settings = Record<string, any>;
+
+const About: React.FC<{ settings?: Settings }> = ({ settings = {} }) => {
+  const ref = useRef<HTMLElement | null>(null);
 
   const aboutTitle = settings.about_title || "About Cafe Delight";
   const aboutText1 =
@@ -20,7 +22,9 @@ const About = ({ settings = {} }) => {
     if (!ref.current) return;
 
     const ctx = gsap.context(() => {
-      const elems = ref.current.querySelectorAll(".about-animate");
+      const elems = (ref.current as HTMLElement).querySelectorAll(
+        ".about-animate",
+      );
 
       gsap.fromTo(
         elems,
@@ -38,7 +42,7 @@ const About = ({ settings = {} }) => {
           },
         },
       );
-    }, ref);
+    }, ref as any);
 
     return () => {
       ctx.revert();
@@ -48,7 +52,7 @@ const About = ({ settings = {} }) => {
   return (
     <section
       id="about"
-      ref={ref}
+      ref={ref as any}
       className="py-20 px-4 themed-surface cafe-section-texture"
     >
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">

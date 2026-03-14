@@ -7,7 +7,6 @@ import {
   FaCog,
   FaSignOutAlt,
   FaBars,
-  FaTimes,
 } from "react-icons/fa";
 
 const NAV_ITEMS = [
@@ -16,7 +15,7 @@ const NAV_ITEMS = [
   { to: "/admin/settings", icon: FaCog, label: "Settings" },
 ];
 
-export default function AdminLayout({ user, onLogout, children }) {
+export default function AdminLayout({ user, onLogout, children }: any) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
@@ -27,7 +26,6 @@ export default function AdminLayout({ user, onLogout, children }) {
 
   return (
     <div className="admin-layout">
-      {/* Sidebar overlay (mobile) */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-30 md:hidden"
@@ -35,7 +33,6 @@ export default function AdminLayout({ user, onLogout, children }) {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`admin-sidebar ${sidebarOpen ? "open" : ""} ${
           sidebarCollapsed ? "collapsed" : ""
@@ -89,13 +86,11 @@ export default function AdminLayout({ user, onLogout, children }) {
         </div>
       </aside>
 
-      {/* Main Content */}
       <div className={`admin-main ${sidebarCollapsed ? "expanded" : ""}`}>
         <div className="admin-topbar">
           <div
             style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
           >
-            {/* Desktop hamburger */}
             <button
               className="admin-btn admin-btn-gray sidebar-toggle-desktop"
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
@@ -115,7 +110,6 @@ export default function AdminLayout({ user, onLogout, children }) {
             </h1>
           </div>
 
-          {/* Mobile hamburger */}
           <button
             className="admin-btn admin-btn-gray sidebar-toggle-mobile"
             onClick={() => setSidebarOpen(!sidebarOpen)}
