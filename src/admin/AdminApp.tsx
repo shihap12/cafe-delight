@@ -8,7 +8,8 @@ import AdminSettings from "./AdminSettings";
 import "./admin.css";
 
 export default function AdminApp() {
-  const [auth, setAuth] = useState<any>({
+  type AuthState = { checking: boolean; user: any | null; csrfToken: string };
+  const [auth, setAuth] = useState<AuthState>({
     checking: true,
     user: null,
     csrfToken: "",

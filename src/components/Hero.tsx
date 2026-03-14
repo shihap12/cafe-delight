@@ -13,7 +13,7 @@ type LetterSpansProps = {
 
 function LetterSpans({ word, className, innerRef }: LetterSpansProps) {
   return (
-    <span ref={innerRef as any} className={className}>
+    <span ref={innerRef as React.Ref<HTMLSpanElement>} className={className}>
       {word.split("").map((ch, i) => (
         <span
           key={i}

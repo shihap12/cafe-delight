@@ -27,7 +27,10 @@ const Cart: React.FC<{
   const [customerPhone, setCustomerPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [couponInput, setCouponInput] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState<Record<string, any> | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<Record<
+    string,
+    any
+  > | null>(null);
   const [receipt, setReceipt] = useState<Record<string, any> | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });

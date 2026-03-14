@@ -5,7 +5,9 @@ import { buildApiUrl } from "../config/api";
 import MenuCard from "./MenuCard";
 import { MenuItem } from "../types";
 
-const Menu: React.FC<{ addToCart: (item: MenuItem) => void }> = ({ addToCart }) => {
+const Menu: React.FC<{ addToCart: (item: MenuItem) => void }> = ({
+  addToCart,
+}) => {
   const [filter, setFilter] = useState<string>("All");
   const [allItems, setAllItems] = useState<MenuItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<MenuItem[]>([]);
@@ -66,8 +68,9 @@ const Menu: React.FC<{ addToCart: (item: MenuItem) => void }> = ({ addToCart }) 
   useEffect(() => {
     if (prefersReducedMotion) return;
     if (containerRef.current) {
+      const children = Array.from(containerRef.current.children) as HTMLElement[];
       gsap.fromTo(
-        (containerRef.current as any).children,
+        children,
         { y: 24, opacity: 0 },
         {
           y: 0,

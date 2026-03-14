@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./admin.css";
+import { User, ApiResponse } from "../types";
 
-export default function AdminLogin({ onLogin }: any) {
+export default function AdminLogin({ onLogin }: { onLogin: (user: User, csrfToken: string) => void }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,7 +26,8 @@ export default function AdminLogin({ onLogin }: any) {
         body: JSON.stringify({ username: username.trim(), password }),
       });
 
-      let data: any = {};
+      type LoginResult = { user?: any; csrfToken?: string; error?: string };
+      let data: LoginResult = {};
       try {
         data = await res.json();
       } catch {
@@ -39,8 +41,8 @@ export default function AdminLogin({ onLogin }: any) {
         return;
       }
 
-      onLogin(data.user, data.csrfToken);
-      const returnTo = (location.state as any)?.returnTo || "/admin/products";
+      onLogin(data.user, data.csrfToken ?? "");
+      const returnTo = (location.state as { returnTo?: string } | null)?.returnTo || "/admin/products";
       navigate(returnTo, { replace: true });
     } catch {
       setError("Connection error. Make sure the server is running.");

@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-export default function AdminOrders({ csrfToken }: any) {
-  const [orders, setOrders] = useState<any[]>([]);
+export default function AdminOrders({ csrfToken }: { csrfToken?: string }) {
+  type OrderItem = { name?: string; quantity?: number; unit_price?: number };
+  type Order = { id: number; customer_name?: string; customer_phone?: string; total_amount?: number; created_at?: string; notes?: string; items?: OrderItem[] };
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
