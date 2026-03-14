@@ -38,7 +38,7 @@ export default function AdminProducts({ csrfToken }: { csrfToken?: string }) {
     fetchProducts();
   }, []);
 
-  const handleDelete = async (product: any) => {
+  const handleDelete = async (product: Product) => {
     if (!window.confirm(`Delete "${product.name}"?`)) return;
 
     try {
@@ -242,12 +242,32 @@ export default function AdminProducts({ csrfToken }: { csrfToken?: string }) {
   );
 }
 
-function ProductModal({ product, csrfToken, onClose, onSaved }: any) {
+type ProductForm = {
+  name: string;
+  description: string;
+  price: number | string;
+  category: string;
+  image: string;
+};
+
+type ProductModalProps = {
+  product?: Product | null;
+  csrfToken?: string;
+  onClose: () => void;
+  onSaved: () => void;
+};
+
+function ProductModal({
+  product,
+  csrfToken,
+  onClose,
+  onSaved,
+}: ProductModalProps) {
   const isEdit = !!product;
-  const [form, setForm] = useState<any>({
+  const [form, setForm] = useState<ProductForm>({
     name: product?.name || "",
     description: product?.description || "",
-    price: product?.price || "",
+    price: product?.price ?? "",
     category: product?.category || "Drinks",
     image: product?.image || "",
   });
@@ -256,8 +276,8 @@ function ProductModal({ product, csrfToken, onClose, onSaved }: any) {
   const [error, setError] = useState("");
   const fileRef = useRef<HTMLInputElement | null>(null);
 
-  const handleChange = (field: string, value: any) => {
-    setForm((f: any) => ({ ...f, [field]: value }));
+  const handleChange = (field: keyof ProductForm, value: string | number) => {
+    setForm((f) => ({ ...f, [field]: value }) as ProductForm);
   };
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -291,7 +311,7 @@ function ProductModal({ product, csrfToken, onClose, onSaved }: any) {
 
       const res = await fetch("/api/admin/upload.php", {
         method: "POST",
-        headers: { "X-CSRF-Token": csrfToken },
+        headers: { "X-CSRF-Token": csrfToken || "" },
         credentials: "include",
         body: fd,
       });
@@ -315,15 +335,17 @@ function ProductModal({ product, csrfToken, onClose, onSaved }: any) {
     setSaving(true);
     setError("");
 
-    const payload: any = isEdit ? { ...form, id: product.id } : form;
-    payload.price = parseFloat(payload.price) || 0;
+    const payload: ProductForm & { id?: number } = isEdit
+      ? ({ ...form, id: product!.id } as ProductForm & { id?: number })
+      : (form as ProductForm);
+    payload.price = parseFloat(String(payload.price)) || 0;
 
     try {
       const res = await fetch("/api/admin/products.php", {
         method: isEdit ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
+          "X-CSRF-Token": csrfToken || "",
         },
         credentials: "include",
         body: JSON.stringify(payload),

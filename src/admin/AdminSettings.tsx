@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { FaSave, FaUpload, FaKey } from "react-icons/fa";
+import { Settings } from "../types";
 
-const CONTENT_DEFAULTS: Record<string, any> = {
+const CONTENT_DEFAULTS: Settings = {
   hero_line1: "Taste",
   hero_line2: "The",
   hero_line3: "Passion",
@@ -22,7 +23,7 @@ const CONTENT_DEFAULTS: Record<string, any> = {
   social_whatsapp: "#",
 };
 
-const THEME_DEFAULTS: Record<string, any> = {
+const THEME_DEFAULTS: Record<string, Record<string, string>> = {
   classic: {
     cafeBg: "#f8f5ef",
     cafeText: "#1f1b16",
@@ -78,12 +79,12 @@ const COLOR_LABELS: Record<string, string> = {
   cafeBorder: "Border Color",
 };
 
-export default function AdminSettings({ csrfToken }: any) {
+export default function AdminSettings({ csrfToken }: { csrfToken?: string }) {
   const [tab, setTab] = useState("content");
-  const [content, setContent] = useState<Record<string, any>>({
+  const [content, setContent] = useState<Settings>({
     ...CONTENT_DEFAULTS,
   });
-  const [themes, setThemes] = useState<any>({
+  const [themes, setThemes] = useState<Record<string, Record<string, string>>>({
     classic: { ...THEME_DEFAULTS.classic },
     midnight: { ...THEME_DEFAULTS.midnight },
     sunset: { ...THEME_DEFAULTS.sunset },
@@ -100,7 +101,7 @@ export default function AdminSettings({ csrfToken }: any) {
   });
   const [pwStatus, setPwStatus] = useState({ type: "", msg: "" });
 
-  const uploadRefs: any = {
+  const uploadRefs: Record<string, React.RefObject<HTMLInputElement>> = {
     hero: useRef<HTMLInputElement | null>(null),
     about: useRef<HTMLInputElement | null>(null),
   };
@@ -148,7 +149,7 @@ export default function AdminSettings({ csrfToken }: any) {
     setSaving(true);
     setStatus({ type: "", msg: "" });
 
-    const payload: any = { ...content };
+    const payload: Record<string, unknown> = { ...content };
     ["classic", "midnight", "sunset"].forEach((t) => {
       payload[`theme_${t}`] = themes[t];
     });
@@ -158,7 +159,7 @@ export default function AdminSettings({ csrfToken }: any) {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
+          "X-CSRF-Token": csrfToken || "",
         },
         credentials: "include",
         body: JSON.stringify(payload),
@@ -190,7 +191,7 @@ export default function AdminSettings({ csrfToken }: any) {
     try {
       const res = await fetch("/api/admin/upload.php", {
         method: "POST",
-        headers: { "X-CSRF-Token": csrfToken },
+        headers: { "X-CSRF-Token": csrfToken || "" },
         credentials: "include",
         body: fd,
       });
@@ -225,7 +226,7 @@ export default function AdminSettings({ csrfToken }: any) {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
+          "X-CSRF-Token": csrfToken || "",
         },
         credentials: "include",
         body: JSON.stringify({
@@ -248,14 +249,14 @@ export default function AdminSettings({ csrfToken }: any) {
   };
 
   const updateThemeColor = (theme: string, key: string, value: string) => {
-    setThemes((prev: any) => ({
+    setThemes((prev: Record<string, Record<string, string>>) => ({
       ...prev,
       [theme]: { ...prev[theme], [key]: value },
     }));
   };
 
   const resetTheme = (theme: string) => {
-    setThemes((prev: any) => ({
+    setThemes((prev: Record<string, Record<string, string>>) => ({
       ...prev,
       [theme]: { ...THEME_DEFAULTS[theme] },
     }));
@@ -481,7 +482,7 @@ export default function AdminSettings({ csrfToken }: any) {
                 <label>Brand Name</label>
                 <input
                   className="admin-input"
-                  value={content.footer_brand}
+                  value={String(content.footer_brand || "")}
                   onChange={(e) =>
                     setContent({ ...content, footer_brand: e.target.value })
                   }
@@ -491,7 +492,7 @@ export default function AdminSettings({ csrfToken }: any) {
                 <label>Tagline</label>
                 <input
                   className="admin-input"
-                  value={content.footer_tagline}
+                  value={String(content.footer_tagline || "")}
                   onChange={(e) =>
                     setContent({ ...content, footer_tagline: e.target.value })
                   }
@@ -522,7 +523,7 @@ export default function AdminSettings({ csrfToken }: any) {
                   <label>{s.label}</label>
                   <input
                     className="admin-input"
-                    value={content[s.key]}
+                    value={String(content[s.key] || "")}
                     onChange={(e) =>
                       setContent({ ...content, [s.key]: e.target.value })
                     }

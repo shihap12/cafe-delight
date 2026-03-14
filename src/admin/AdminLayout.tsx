@@ -15,7 +15,15 @@ const NAV_ITEMS = [
   { to: "/admin/settings", icon: FaCog, label: "Settings" },
 ];
 
-export default function AdminLayout({ user, onLogout, children }: { user: { username?: string }, onLogout: () => void, children: React.ReactNode }) {
+export default function AdminLayout({
+  user,
+  onLogout,
+  children,
+}: {
+  user: { username?: string };
+  onLogout: () => void;
+  children: React.ReactNode;
+}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();

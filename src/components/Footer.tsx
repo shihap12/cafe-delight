@@ -1,12 +1,15 @@
 import React from "react";
 import { FaInstagram, FaTiktok, FaFacebookF, FaWhatsapp } from "react-icons/fa";
+import { Settings } from "../types";
 
-type Settings = Record<string, any>;
+type CSSVars = React.CSSProperties &
+  Record<string, string | number | undefined>;
 
 const Footer: React.FC<{ settings?: Settings }> = ({ settings = {} }) => {
-  const footerBrand = settings.footer_brand || "CAFE DELIGHT";
-  const footerTagline =
-    settings.footer_tagline || "Taste the Passion in Every Sip";
+  const footerBrand = String(settings.footer_brand || "CAFE DELIGHT");
+  const footerTagline = String(
+    settings.footer_tagline || "Taste the Passion in Every Sip",
+  );
 
   const socialLinks = [
     {
@@ -51,13 +54,13 @@ const Footer: React.FC<{ settings?: Settings }> = ({ settings = {} }) => {
           {socialLinks.map((social) => (
             <a
               key={social.name}
-              href={social.href}
+              href={String(social.href || "#")}
               className="social-icon-glow p-3 themed-card rounded-full transition-all duration-300 transform hover:scale-110 hover:-translate-y-1"
               style={
                 {
-                  ["--icon-brand" as any]: social.brandColor,
-                  ["--icon-glow" as any]: social.glowColor,
-                } as React.CSSProperties
+                  ["--icon-brand"]: social.brandColor,
+                  ["--icon-glow"]: social.glowColor,
+                } as unknown as CSSVars
               }
               aria-label={social.name}
             >

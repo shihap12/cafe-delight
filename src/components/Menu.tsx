@@ -68,7 +68,9 @@ const Menu: React.FC<{ addToCart: (item: MenuItem) => void }> = ({
   useEffect(() => {
     if (prefersReducedMotion) return;
     if (containerRef.current) {
-      const children = Array.from(containerRef.current.children) as HTMLElement[];
+      const children = Array.from(
+        containerRef.current.children,
+      ) as HTMLElement[];
       gsap.fromTo(
         children,
         { y: 24, opacity: 0 },

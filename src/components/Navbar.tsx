@@ -7,8 +7,23 @@ import {
   FaAdjust,
   FaShoppingCart,
 } from "react-icons/fa";
+import { Theme } from "../types";
 
-const Navbar: React.FC<any> = ({
+type NavbarProps = {
+  isNavOpen: boolean;
+  setIsNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isCartOpen: boolean;
+  setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  cartItemCount: number;
+  cartPulse: boolean;
+  theme: Theme;
+  cycleTheme: () => void;
+  themeLabel: string;
+  scrollToMenu: () => void;
+  scrollToAbout: () => void;
+};
+
+const Navbar: React.FC<NavbarProps> = ({
   isNavOpen,
   setIsNavOpen,
   isCartOpen,

@@ -5,6 +5,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+import { Settings } from "../types";
+
 type LetterSpansProps = {
   word: string;
   className?: string;
@@ -66,18 +68,9 @@ const THEME_STYLES = {
   },
 } as const;
 
-type Settings = {
-  hero_line1?: string;
-  hero_line2?: string;
-  hero_line3?: string;
-  hero_subtitle?: string;
-  hero_image?: string;
-  [k: string]: any;
-};
-
 type HeroProps = {
-  titleRef?: React.Ref<HTMLDivElement> | null;
-  btnRef?: React.Ref<HTMLButtonElement> | null;
+  titleRef?: React.RefObject<HTMLDivElement> | null;
+  btnRef?: React.RefObject<HTMLButtonElement> | null;
   scrollToMenu?: () => void;
   theme?: keyof typeof THEME_STYLES;
   settings?: Settings;
@@ -153,12 +146,16 @@ const Hero = forwardRef<HTMLElement, HeroProps>(
           { y: 30, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.6 },
           "-=0.3",
-        ).fromTo(
-          btnRef as any,
-          { scale: 0.85, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.5 },
-          "-=0.2",
         );
+
+        if (btnRef?.current) {
+          tl.fromTo(
+            btnRef.current,
+            { scale: 0.85, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.5 },
+            "-=0.2",
+          );
+        }
 
         tl.fromTo(
           imageWrapRef.current,
@@ -195,7 +192,7 @@ const Hero = forwardRef<HTMLElement, HeroProps>(
             });
           });
         }
-      }, heroContentRef as any);
+      }, heroContentRef.current ?? undefined);
 
       return () => ctx.revert();
     }, []);
@@ -227,7 +224,7 @@ const Hero = forwardRef<HTMLElement, HeroProps>(
           </div>
 
           <div
-            ref={titleRef as any}
+            ref={titleRef}
             className="relative z-10 w-full lg:w-1/2 px-8 md:px-16 lg:px-20"
           >
             <div className="max-w-xl">
@@ -257,10 +254,14 @@ const Hero = forwardRef<HTMLElement, HeroProps>(
               </p>
 
               <button
-                ref={btnRef as any}
+                ref={btnRef}
                 onClick={scrollToMenu}
                 className={`relative overflow-hidden bg-gradient-to-r ${t.btnGrad} text-white font-bold py-4 px-12 rounded-full transition-all duration-300 hover:scale-105 cursor-pointer group opacity-0`}
-                style={{ ["--tw-shadow-color" as any]: t.btnShadow }}
+                style={
+                  {
+                    ["--tw-shadow-color"]: t.btnShadow,
+                  } as unknown as React.CSSProperties
+                }
               >
                 <span className="relative z-10 flex items-center gap-2">
                   Order Now
@@ -272,7 +273,7 @@ const Hero = forwardRef<HTMLElement, HeroProps>(
           </div>
 
           <div
-            ref={imageWrapRef as any}
+            ref={imageWrapRef}
             className="hidden lg:flex absolute right-0 top-0 w-1/2 h-full items-center justify-center opacity-0"
           >
             <div

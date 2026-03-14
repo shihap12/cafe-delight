@@ -89,7 +89,7 @@ const App: React.FC = () => {
     cssVars.forEach((v) => root.style.removeProperty(v));
 
     const themeKey = `theme_${theme}`;
-    const colors = siteSettings[themeKey];
+    const colors = siteSettings[themeKey] as Record<string, string> | undefined;
     if (colors && typeof colors === "object") {
       const map: Record<string, string> = {
         cafeBg: "--cafe-bg",
@@ -144,7 +144,7 @@ const App: React.FC = () => {
             },
           );
         });
-    }, appRef as any);
+    }, appRef.current ?? undefined);
 
     return () => ctx.revert();
   }, []);
@@ -260,9 +260,9 @@ const App: React.FC = () => {
       />
 
       <Hero
-        ref={heroRef as any}
-        titleRef={titleRef as any}
-        btnRef={btnRef as any}
+        ref={heroRef}
+        titleRef={titleRef}
+        btnRef={btnRef}
         scrollToMenu={scrollToMenu}
         theme={theme}
         settings={siteSettings}

@@ -1,9 +1,17 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export default function AdminOrders({ csrfToken }: { csrfToken?: string }) {
   type OrderItem = { name?: string; quantity?: number; unit_price?: number };
-  type Order = { id: number; customer_name?: string; customer_phone?: string; total_amount?: number; created_at?: string; notes?: string; items?: OrderItem[] };
+  type Order = {
+    id: number;
+    customer_name?: string;
+    customer_phone?: string;
+    total_amount?: number;
+    created_at?: string;
+    notes?: string;
+    items?: OrderItem[];
+  };
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -70,9 +78,9 @@ export default function AdminOrders({ csrfToken }: { csrfToken?: string }) {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order: any) => (
-                  <>
-                    <tr key={order.id}>
+                {orders.map((order: Order) => (
+                  <React.Fragment key={order.id}>
+                    <tr>
                       <td style={{ fontWeight: 600 }}>{order.id}</td>
                       <td>{order.customer_name || "—"}</td>
                       <td>{order.customer_phone || "—"}</td>
@@ -80,7 +88,9 @@ export default function AdminOrders({ csrfToken }: { csrfToken?: string }) {
                         ${Number(order.total_amount).toFixed(2)}
                       </td>
                       <td style={{ fontSize: "0.8rem", color: "#64748b" }}>
-                        {new Date(order.created_at).toLocaleString()}
+                        {order.created_at
+                          ? new Date(order.created_at).toLocaleString()
+                          : "—"}
                       </td>
                       <td>
                         <button
@@ -119,7 +129,7 @@ export default function AdminOrders({ csrfToken }: { csrfToken?: string }) {
                             }}
                           >
                             {(order.items || []).map(
-                              (item: any, idx: number) => (
+                              (item: OrderItem, idx: number) => (
                                 <span
                                   key={idx}
                                   className="admin-badge admin-badge-blue"
@@ -141,7 +151,7 @@ export default function AdminOrders({ csrfToken }: { csrfToken?: string }) {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>

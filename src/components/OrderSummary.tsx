@@ -1,6 +1,6 @@
 import React from "react";
 import { FaCheck, FaArrowRight } from "react-icons/fa";
-import { CartItem } from "../types";
+import { CartItem, Receipt } from "../types";
 
 type OrderSummaryProps = {
   subtotal: number;
@@ -17,7 +17,7 @@ type OrderSummaryProps = {
   notes: string;
   setNotes: (v: string) => void;
   status: { type?: string; message?: string };
-  receipt: Record<string, any> | null;
+  receipt: Receipt | null;
   isSubmitting: boolean;
   showSuccessTick: boolean;
   handleConfirmOrder: () => void;

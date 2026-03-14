@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { User } from "../types";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import AdminLogin from "./AdminLogin";
 import AdminLayout from "./AdminLayout";
@@ -8,12 +9,15 @@ import AdminSettings from "./AdminSettings";
 import "./admin.css";
 
 export default function AdminApp() {
-  type AuthState = { checking: boolean; user: any | null; csrfToken: string };
+  type AuthState = { checking: boolean; user: User | null; csrfToken: string };
   const [auth, setAuth] = useState<AuthState>({
     checking: true,
     user: null,
     csrfToken: "",
   });
+
+  // keep router hooks at top-level so hook order doesn't change between renders
+  const location = useLocation();
 
   useEffect(() => {
     checkAuth();
@@ -39,7 +43,7 @@ export default function AdminApp() {
     }
   };
 
-  const handleLogin = (user: any, csrfToken: string) => {
+  const handleLogin = (user: User, csrfToken: string) => {
     setAuth({ checking: false, user, csrfToken });
   };
 
@@ -59,7 +63,6 @@ export default function AdminApp() {
     return <div className="admin-loading">Loading...</div>;
   }
 
-  const location = useLocation();
   if (!auth.user) {
     const returnTo = location.pathname + location.search;
     return (

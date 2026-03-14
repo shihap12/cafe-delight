@@ -19,8 +19,35 @@ export type ApiResponse<T> = {
   page?: number;
 };
 
-export type Settings = Record<string, any>;
+export type ThemeColors = Record<string, string>;
+
+export type Settings = {
+  about_title?: string;
+  about_text1?: string;
+  about_text2?: string;
+  about_image?: string;
+  hero_line1?: string;
+  hero_line2?: string;
+  hero_line3?: string;
+  hero_subtitle?: string;
+  hero_image?: string;
+  // theme palettes
+  theme_classic?: ThemeColors;
+  theme_midnight?: ThemeColors;
+  theme_sunset?: ThemeColors;
+  [k: string]: unknown;
+};
 
 export type Product = MenuItem;
 
-export type User = { username?: string; [k: string]: any };
+export type User = { username?: string } & Record<string, unknown>;
+
+export type Receipt = {
+  orderId: string | number;
+  createdAt: string;
+  subtotal: string;
+  discount: string;
+  tax: string;
+  total: string;
+  couponCode?: string | null;
+};

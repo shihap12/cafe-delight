@@ -3,7 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./admin.css";
 import { User, ApiResponse } from "../types";
 
-export default function AdminLogin({ onLogin }: { onLogin: (user: User, csrfToken: string) => void }) {
+export default function AdminLogin({
+  onLogin,
+}: {
+  onLogin: (user: User, csrfToken: string) => void;
+}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -26,7 +30,7 @@ export default function AdminLogin({ onLogin }: { onLogin: (user: User, csrfToke
         body: JSON.stringify({ username: username.trim(), password }),
       });
 
-      type LoginResult = { user?: any; csrfToken?: string; error?: string };
+      type LoginResult = { user?: User; csrfToken?: string; error?: string };
       let data: LoginResult = {};
       try {
         data = await res.json();
@@ -41,8 +45,15 @@ export default function AdminLogin({ onLogin }: { onLogin: (user: User, csrfToke
         return;
       }
 
-      onLogin(data.user, data.csrfToken ?? "");
-      const returnTo = (location.state as { returnTo?: string } | null)?.returnTo || "/admin/products";
+      if (!data.user) {
+        setError("Server returned no user data");
+        return;
+      }
+
+      onLogin(data.user as User, data.csrfToken ?? "");
+      const returnTo =
+        (location.state as { returnTo?: string } | null)?.returnTo ||
+        "/admin/products";
       navigate(returnTo, { replace: true });
     } catch {
       setError("Connection error. Make sure the server is running.");

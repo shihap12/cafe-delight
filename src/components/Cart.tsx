@@ -27,17 +27,25 @@ const Cart: React.FC<{
   const [customerPhone, setCustomerPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [couponInput, setCouponInput] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState<Record<
-    string,
-    any
-  > | null>(null);
-  const [receipt, setReceipt] = useState<Record<string, any> | null>(null);
+  type Coupon = { type: "percent" | "flat"; value: number; code?: string };
+  type Receipt = {
+    orderId: string | number;
+    createdAt: string;
+    subtotal: string;
+    discount: string;
+    tax: string;
+    total: string;
+    couponCode?: string | null;
+  };
+
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
+  const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
   const [showSuccessTick, setShowSuccessTick] = useState(false);
 
   const TAX_RATE = 0.1;
-  const COUPONS: Record<string, any> = {
+  const COUPONS: Record<string, Coupon> = {
     WELCOME10: { type: "percent", value: 10 },
     SWEET5: { type: "flat", value: 5 },
     CAFE15: { type: "percent", value: 15 },
@@ -67,7 +75,8 @@ const Cart: React.FC<{
   }, [isOpen, closeCart]);
 
   const subtotal = items.reduce(
-    (sum: number, item: any) => sum + Number(item.price) * item.quantity,
+    (sum: number, item: CartItemType) =>
+      sum + Number(item.price) * item.quantity,
     0,
   );
 
@@ -147,7 +156,7 @@ const Cart: React.FC<{
         phone: customerPhone.trim(),
         notes: notes.trim(),
       },
-      items: items.map((item: any) => ({
+      items: items.map((item: CartItemType) => ({
         id: item.id,
         name: item.name,
         price: Number(item.price),
@@ -242,7 +251,7 @@ const Cart: React.FC<{
               </p>
             </div>
           ) : (
-            items.map((item: any) => (
+            items.map((item: CartItemType) => (
               <CartItem
                 key={item.id}
                 item={item}

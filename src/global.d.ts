@@ -10,5 +10,5 @@ declare module "*.css";
 declare module "*.module.css";
 
 interface Window {
-  gsap?: any;
+  gsap?: typeof import("gsap") | undefined;
 }
