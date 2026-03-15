@@ -165,6 +165,15 @@ export default function AdminSettings({ csrfToken }: { csrfToken?: string }) {
         body: JSON.stringify(payload),
       });
 
+      // diagnostic logging: clone response to read text without consuming original
+      try {
+        const resText = await res.clone().text();
+        console.log("admin settings save status", res.status);
+        console.log("admin settings save body", resText);
+      } catch (e) {
+        console.log("admin settings save log error", e);
+      }
+
       if (!res.ok) {
         const d = await res.json();
         setStatus({ type: "error", msg: d.error || "Save failed" });
